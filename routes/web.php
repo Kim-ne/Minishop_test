@@ -8,5 +8,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class,'index'])->name('home');
 
 //route for product page
-Route::get('/products', [ProductController::class,'index'])->name('product');
+Route::get('/products', [ProductController::class,'index'])->name('product.index');
+
+//route for product detail page
+Route::get('/{alias}', [ProductController::class,'detail'])->name('product.detail');
 

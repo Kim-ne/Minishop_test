@@ -2,6 +2,8 @@
 
 namespace App\Services\Interface;
 
+use App\Models\Product;
+
 interface ProductServiceInterface
 {
     /**
@@ -10,7 +12,6 @@ interface ProductServiceInterface
      */
     public function getListProduct(): mixed;
     public function getListCategory(): mixed;
-
+    public function detail($alias): mixed;
+    public function getRelatedProduct(Product $product): mixed;
 }
-
-

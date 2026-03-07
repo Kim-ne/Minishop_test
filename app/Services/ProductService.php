@@ -13,6 +13,8 @@ class ProductService implements ProductServiceInterface
     /**
      * Get paginated list of products for the product  index page.
      * @return LengthAwarePaginator
+     * @return Collection
+     * @return mixed
      */
     public function getListProduct(): LengthAwarePaginator
     {
@@ -21,5 +23,18 @@ class ProductService implements ProductServiceInterface
     public function getListCategory(): Collection
     {
         return Category::getList();
+    }
+    public function detail($alias): mixed
+    {
+        $product = Product::detail($alias);
+        if(!$product){
+            return null;
+        }
+        return $product;
+    }
+
+    public function getRelatedProduct(Product $product): Collection
+    {
+        return Product::getRelated($product);
     }
 }

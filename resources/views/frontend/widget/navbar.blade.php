@@ -21,7 +21,6 @@
                     </div> --}}
                    @foreach ( $categories as $category )
                     <a href="" class="nav-item nav-link">{{ Str::ucfirst($category->name) }}</a>
-
                    @endforeach
                 </div>
             </nav>
