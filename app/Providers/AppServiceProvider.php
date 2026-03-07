@@ -12,9 +12,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // HomeServiceInterface
         $this->app->bind(
             \App\Services\Interface\HomeServiceInterface::class,
             \App\Services\HomeService::class
+        );
+        
+        // ProductServiceInterface
+        $this->app->bind(
+            \App\Services\Interface\ProductServiceInterface::class,
+            \App\Services\ProductService::class
         );
     }
 
