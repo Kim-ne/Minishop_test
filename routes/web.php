@@ -13,3 +13,5 @@ Route::get('/products', [ProductController::class,'index'])->name('product.index
 //route for product detail page
 Route::get('/{alias}', [ProductController::class,'detail'])->name('product.detail');
 
+//route for cart page
+Route::get('/cart', [ProductController::class,'getCartProduct'])->name('product.cart');
