@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -10,8 +11,9 @@ Route::get('/', [HomeController::class,'index'])->name('home');
 //route for product page
 Route::get('/products', [ProductController::class,'index'])->name('product.index');
 
+//route for cart page
+Route::get('/cart', [CartController::class,'getCart'])->name('product.cart');
+Route::get('/cart/{id}', [CartController::class,'addToCart'])->name('product.addToCart');
+
 //route for product detail page
 Route::get('/{alias}', [ProductController::class,'detail'])->name('product.detail');
-
-//route for cart page
-Route::get('/cart', [ProductController::class,'getCartProduct'])->name('product.cart');

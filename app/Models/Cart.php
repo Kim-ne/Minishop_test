@@ -11,15 +11,10 @@ use Ramsey\Collection\Collection;
 class Cart  extends Model
 {
     use HasFactory,Notifiable;
-    function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-    static function getCartProduct($id): Collection
-    {
-        return Product::where('id',$id)->get();
-    }
+    // static function getCart($id): Collection
+    // {
+    //     return self::where('id',$id)->get();
+    // }
 }
 
 
