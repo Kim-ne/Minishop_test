@@ -23,5 +23,6 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href={{ asset('frontend/css/style.css') }} rel="stylesheet">
+    <link href={{ asset('frontend/css/mycss.css') }} rel="stylesheet">
 </head>
 </html>
