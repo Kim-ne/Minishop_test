@@ -16,6 +16,7 @@ Route::get('/cart', [CartController::class,'getCart'])->name('product.cart');
 Route::post('/cart/{id}', [CartController::class,'addToCart'])->name('product.addToCart');
 Route::get('/cart/remove/{id}', [CartController::class,'removeFromCart'])->name('cart.remove');
 Route::put('/cart/update/{id}', [CartController::class,'updateCart'])->name('cart.update');
+Route::get('/checkout',[CartController::class,'order'])->name('checkout');
 
 //route for product detail page
 Route::get('/{alias}', [ProductController::class,'detail'])->name('product.detail');

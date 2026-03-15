@@ -311,7 +311,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center py-4">
-                                    <a class="h6 text-decoration-none text-truncate" href="">{{ Str::ucfirst($item->name)}}</a>
+                                    <a class="h6 text-decoration-none text-truncate" href="{{ route('product.detail', $item->alias) }}">{{ Str::ucfirst($item->name)}}</a>
                                     <div class="d-flex align-items-center justify-content-center mt-2">
                                         <h5>{{ number_format($item->price * 1000) }} VND</h5>
                                         <h6 class="text-muted ml-2"><del>{{ number_format($item->price * 1000 * 0.8) }}

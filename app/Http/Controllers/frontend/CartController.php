@@ -82,18 +82,38 @@ class CartController extends Controller
             'qty' => 'required|integer|min:0'
         ]);
         $newQty = $validated['qty'];
-        $cart = session('cart', []);
-        if(!isset($cart[$id])){
+        $cart = collect(session('cart', []));
+        if(!$cart->has($id)){
             return redirect()->route('product.cart')->with('error', 'Product not found in cart');
+        }
+        $product = Product::find($id);
+        if(!$product){
+            return redirect()->route('product.cart')->with('error', 'Product not found');
+        }
+        $er = '';
+        $stock = $product->qty ?? 0;
+        if($newQty > $stock){
+            return redirect()->route('product.cart')->with('error', 'Product '.$product->name.' stock not enough');
         }
 
         if($newQty <= 0){
-            unset($cart[$id]);
+            $cart->forget($id);
         }else{
             $cart[$id]->buy_qty = $newQty;
         }
-        session(['cart'=>$cart]);
+        session(['cart'=>$cart->toArray()]);
         return redirect()->route('product.cart')->with('success', 'Product quantity updated');
     }
 
+    function order()
+    {
+        $order = collect(session('cart', []));
+        if($order->isEmpty()){
+            return redirect()->route('product.cart')->with('error', 'Cart is empty');
+        }
+        return view('frontend.product.cart.checkout',[
+            'order' => $order,
+            'categories' => Category::all()
+        ]);
+    }
 }

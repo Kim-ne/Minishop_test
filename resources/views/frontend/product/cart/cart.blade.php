@@ -29,8 +29,15 @@
                 </div>
 
             @else
+
                 <div class="row px-xl-5">
+
                     <div class="col-lg-8 table-responsive mb-5">
+                        @if (session('error'))
+                            <div class="arlet danger-arlet">
+                                <strong>{{ session('error') }}</strong>
+                            </div>
+                        @endif
                         <table class="table table-light table-borderless table-hover text-center mb-0">
                             <thead class="thead-dark">
                                 <tr>
@@ -74,8 +81,9 @@
                                     <h5>Total</h5>
                                     <h5>{{ number_format($total * 1000) }} VND</h5>
                                 </div>
-                                <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To
-                                    Checkout</button>
+                                <a class="btn btn-block btn-primary font-weight-bold my-3 py-3"
+                                    href="{{ route('checkout') }}">Proceed To
+                                    Checkout</a>
                             </div>
                         </div>
                     </div>

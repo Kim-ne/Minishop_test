@@ -5,6 +5,7 @@
         <form action="{{ route('cart.update', ['id' => $item->id]) }}" method="post">
             @csrf
             @method('PUT')
+           
             <td class="align-middle"><img src="{{ $item->image }}" alt="" style="width: 50px;"> {{ $item->name }}</td>
             <td class="align-middle">{{ number_format($item->price * 1000) }} VND</td>
             <td class="align-middle">

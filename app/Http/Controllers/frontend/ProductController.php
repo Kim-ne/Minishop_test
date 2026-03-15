@@ -46,15 +46,16 @@ class ProductController extends Controller
 
         $product = $this->ProductService->detail($alias);
 
-        if (!$product) {
-            return redirect()->route('product.index')->with('error', 'Product not found');
-        }
+        // if (!$product) {
+        //     return redirect()->route('product.index')->with('error', 'Product not found');
+        // }
         $related = $this->ProductService->getRelatedProduct($product);
 
-        return view('frontend.product.product_detail', [
+        return view('frontend.product.cart.product_detail', [
             'product' => $product,
             'related' => $related,
             'categories' => $categories
         ]);
+
     }
 }

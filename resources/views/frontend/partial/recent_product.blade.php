@@ -15,10 +15,10 @@
                         </div>
                     </div>
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">{{ $product->name }}</a>
+                        <a class="h6 text-decoration-none text-truncate" href="{{ route('product.detail', $product->alias) }}">{{ $product->name }}</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>${{ number_format($product->price * 1000, 2) }} VND</h5>
-                            <h6 class="text-muted ml-2"><del>${{ number_format(($product->price * 1000) / 0.8, 2) }}
+                            <h5>{{ number_format($product->price * 1000, 2) }} VND</h5>
+                            <h6 class="text-muted ml-2"><del>{{ number_format(($product->price * 1000) / 0.8, 2) }}
                                     VND</del></h6>
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
