@@ -19,6 +19,8 @@
         <!-- Breadcrumb End -->
 
         <!-- Shop Detail Start -->
+        <form action="{{ route('product.addToCart',$product->id) }}" method="post">
+            @csrf
         <div class="container-fluid pb-5">
             <div class="row px-xl-5">
                 <div class="col-lg-5 mb-30">
@@ -116,19 +118,22 @@
                         <div class="d-flex align-items-center mb-4 pt-2">
                             <div class="input-group quantity mr-3" style="width: 130px;">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-primary btn-minus">
+                                    <button class="btn btn-primary btn-minus" type="button"
+                                    onclick="this.nextElementSibling.value = Math.max(1,praseInt(this.nextElementSibling.value) - 1)">
                                         <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
-                                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                                <input type="number" class="form-control bg-secondary border-0 text-center" value="1"
+                                min="1" max="99" name="qty">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-primary btn-plus">
+                                    <button class="btn btn-primary btn-plus" type="button"
+                                    onclick="this.previousElementSibling.value = praseInt(this.nextElementSibling.value) + 1 ">
                                         <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
-                            <a href="{{ route('product.addToCart', $carts->id) }}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1">
-                                </i> Add To Cart</a>
+                            <button  class="btn btn-primary px-3" type="submit"><i class="fa fa-shopping-cart mr-1">
+                                </i> Add To Cart</button>
                         </div>
                         <div class="d-flex pt-2">
                             <strong class="text-dark mr-2">Share on:</strong>
@@ -282,6 +287,7 @@
                 </div>
             </div>
         </div>
+        </form>
         <!-- Shop Detail End -->
 
         <!-- Products Start -->

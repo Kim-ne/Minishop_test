@@ -45,14 +45,15 @@ class CartController extends Controller
         if(!$item){
             return redirect()->route('product.index')->with('error', 'Product not found');
         }
-        $carts = session('cart');
+        $qty = max(1, (int)$request->input('qty', 1));
+        $carts = session('cart',[]);
         if(isset($carts[$item->id])){
-            $carts[$item->id]->buy_qty += 1;
+            $carts[$item->id]->buy_qty += $qty;
         }else{
             $cartItem = new stdClass();
             $cartItem->id = $item->id;
             $cartItem->name = $item->name;
-            $cartItem->buy_qty = 1;
+            $cartItem->buy_qty = $qty;
             $cartItem->price = $item->price;
             $cartItem->image = $item->image;
             $carts[$item->id] = $cartItem;
@@ -60,6 +61,39 @@ class CartController extends Controller
         session(['cart'=>$carts]);
         return redirect()->route('product.cart')->with('success', 'Product added to cart');
 
+    }
+    function removeFromCart($id)
+    {
+        $cart = session('cart');
+        if(isset($cart[$id]))
+        {
+            unset($cart[$id]);
+            session(['cart'=>$cart]);
+            // dd($cart);
+            return redirect()->route('product.cart')->with('success', 'Product removed from cart');
+        }else{
+            return redirect()->route('product.cart')->with('error', 'Product not found in cart');
+        }
+
+    }
+    function updateCart(Request $request,$id)
+    {
+        $validated = $request->validate([
+            'qty' => 'required|integer|min:0'
+        ]);
+        $newQty = $validated['qty'];
+        $cart = session('cart', []);
+        if(!isset($cart[$id])){
+            return redirect()->route('product.cart')->with('error', 'Product not found in cart');
+        }
+
+        if($newQty <= 0){
+            unset($cart[$id]);
+        }else{
+            $cart[$id]->buy_qty = $newQty;
+        }
+        session(['cart'=>$cart]);
+        return redirect()->route('product.cart')->with('success', 'Product quantity updated');
     }
 
 }

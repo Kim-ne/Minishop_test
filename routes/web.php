@@ -13,7 +13,9 @@ Route::get('/products', [ProductController::class,'index'])->name('product.index
 
 //route for cart page
 Route::get('/cart', [CartController::class,'getCart'])->name('product.cart');
-Route::get('/cart/{id}', [CartController::class,'addToCart'])->name('product.addToCart');
+Route::post('/cart/{id}', [CartController::class,'addToCart'])->name('product.addToCart');
+Route::get('/cart/remove/{id}', [CartController::class,'removeFromCart'])->name('cart.remove');
+Route::put('/cart/update/{id}', [CartController::class,'updateCart'])->name('cart.update');
 
 //route for product detail page
 Route::get('/{alias}', [ProductController::class,'detail'])->name('product.detail');
