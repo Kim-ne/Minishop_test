@@ -82,7 +82,7 @@
                                     <h5>{{ number_format($total * 1000) }} VND</h5>
                                 </div>
                                 <a class="btn btn-block btn-primary font-weight-bold my-3 py-3"
-                                    href="{{ route('checkout') }}">Proceed To
+                                    href="{{ route('cart.checkout') }}">Proceed To
                                     Checkout</a>
                             </div>
                         </div>
