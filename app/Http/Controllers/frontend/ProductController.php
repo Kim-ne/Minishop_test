@@ -51,10 +51,25 @@ class ProductController extends Controller
         }
         $related = $this->ProductService->getRelatedProduct($product);
 
-        return view('frontend.product.product_detail', [
+        return view('frontend.product.cart.product_detail', [
             'product' => $product,
             'related' => $related,
             'categories' => $categories
+        ]);
+
+    }
+
+    function search(Request $request)
+    {
+        $keyword = $request->keyword;
+        $products = Product::where('name', 'like', "%$keyword%")
+                ->orWhere('description', 'like', "%$keyword%")
+                ->paginate(8);
+
+        return view('frontend.product.search', [
+            'products' => $products,
+            'keyword' => $keyword,
+            'categories' => Category::all()
         ]);
     }
 }

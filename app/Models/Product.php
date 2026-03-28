@@ -15,6 +15,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    function items(){
+        return $this->hasMany(OrderProduct::class);
+    }
 
     /**
      * Get list of products with pagination.
@@ -66,6 +69,7 @@ class Product extends Model
         return self::where('category_id', $product->category_id)
                     ->where('id', '!=', $product->id)->take(4)->get();
     }
+
 }
 
 
