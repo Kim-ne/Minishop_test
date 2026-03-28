@@ -9,6 +9,27 @@ use Illuminate\Notifications\Notifiable;
 class Customer extends Model
 {
     use HasFactory, Notifiable;
+    protected $fillable = [
+        'firstname',
+        'lastname',
+        'email',
+        'phone',
+        'address',
+        'country',
+        'city',
+        'zipcode',
+        'password',
+        'notes',
+        'status',
+        'ship_firstname',
+        'ship_lastname',
+        'ship_email',
+        'ship_phone',
+        'ship_address',
+        'ship_country',
+        'ship_city',
+        'ship_zipcode',
+    ];
     protected $hidden = [
         'password',
         'remember_token'];
@@ -23,5 +44,5 @@ class Customer extends Model
     {
         return $this->hasMany(Order::class);
     }
-    
+
 }

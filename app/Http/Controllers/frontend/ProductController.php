@@ -46,9 +46,9 @@ class ProductController extends Controller
 
         $product = $this->ProductService->detail($alias);
 
-        // if (!$product) {
-        //     return redirect()->route('product.index')->with('error', 'Product not found');
-        // }
+        if (!$product) {
+            return redirect()->route('product.index')->with('error', 'Product not found');
+        }
         $related = $this->ProductService->getRelatedProduct($product);
 
         return view('frontend.product.cart.product_detail', [
@@ -57,5 +57,19 @@ class ProductController extends Controller
             'categories' => $categories
         ]);
 
+    }
+
+    function search(Request $request)
+    {
+        $keyword = $request->keyword;
+        $products = Product::where('name', 'like', "%$keyword%")
+                ->orWhere('description', 'like', "%$keyword%")
+                ->paginate(8);
+
+        return view('frontend.product.search', [
+            'products' => $products,
+            'keyword' => $keyword,
+            'categories' => Category::all()
+        ]);
     }
 }

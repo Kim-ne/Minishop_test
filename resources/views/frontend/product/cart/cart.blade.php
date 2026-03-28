@@ -24,7 +24,8 @@
                 <div class="col-lg-12 text-center">
                     <img src="{{ asset('upload/image/empty_cart.png') }}" alt="">
                 </div>
-                <div class="btn  btn-primary font-weight-bold my-3 py-3 d-flex align-items-center justify-content-center">
+                <div
+                    class="btn col-lg-4 offset-lg-4 btn-primary font-weight-bold my-3 py-3 d-flex align-items-center justify-content-center">
                     <a class="text-uppercase text-dark" href="{{ route('product.index') }}">Continue shopping</a>
                 </div>
 
@@ -52,7 +53,10 @@
                                 @include('frontend.product.cart.partial.item', ['cart' => $cart])
                             </tbody>
                         </table>
-
+                        <div
+                            class="btn col-lg-4 offset-lg-4 btn-primary font-weight-bold my-3 py-3 d-flex align-items-center justify-content-center">
+                            <a class="text-uppercase text-dark" href="{{ route('product.index') }}">Continue shopping</a>
+                        </div>
                     </div>
                     <div class="col-lg-4">
                         <form class="mb-30" action="">

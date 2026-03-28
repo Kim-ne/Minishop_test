@@ -26,6 +26,23 @@ class Order  extends Model
     function items(){
         return $this->hasMany(OrderProduct::class);
     }
+
+    function getStatusLabelAttribute(){
+        switch  ($this->status) {
+            case 1:
+                return 'Recieved';
+                break;
+            case 2:
+                return 'Shipping';
+                break;
+            case 3:
+                return 'Delivered';
+                break;
+            case 4:
+                return 'Cancelled';
+                break;
+        }
+    }
 }
 
 

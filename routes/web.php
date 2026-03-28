@@ -20,5 +20,8 @@ Route::get('/checkout',[CartController::class,'order'])->name('cart.checkout');
 Route::post('/checkout',[CartController::class, 'orderPost'])->name('cart.orderpost');
 Route::get('/cart-completed', [CartController::class,'orderCompleted'])->name('cart.completed');
 
+//search route
+Route::get('/search', [ProductController::class,'search'])->name('search');
+
 //route for product detail page
 Route::get('/{alias}', [ProductController::class,'detail'])->name('product.detail');

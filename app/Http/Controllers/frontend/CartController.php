@@ -150,28 +150,6 @@ class CartController extends Controller
             'zipcode' => 'numeric|digits_between:4,10',
             'payment_method' => ['required', Rule::in(['COD', 'BT', 'PP'])]
             ]);
-        // ],[
-        //     'firstname.required' => 'First name is required',
-        //     'firstname.max' => 'First name is too long',
-        //     'firstname.min' => 'First name is too short',
-        //     'lastname.required' => 'Last name is required',
-        //     'lastname.max' => 'Last name is too long',
-        //     'lastname.min' => 'Last name is too short',
-        //     'email.required' => 'Email is required',
-        //     'email.email' => 'Email is invalid',
-        //     'email.max' => 'Email is too long',
-        //     'phone.required' => 'Phone number is required',
-        //     'phone.numeric' => 'Phone number is invalid',
-        //     'phone.max' => 'Phone number is too long',
-        //     'address.required' => 'Address is required',
-        //     'address.max' => 'Address is too long',
-        //     'country.required' => 'Country is required',
-        //     'country.max' => 'Country is too long',
-        //     'city.required' => 'City is required',
-        //     'city.max' => 'City is too long',
-        //     'zipcode.numeric' => 'Zipcode is invalid',
-        //     'zipcode.max' => 'Zipcode is too long',
-        // ]);
         $fillable = $request->all();
         $fillable['code'] = rand(100000, 999999);
         $order = Order::create($fillable);
@@ -221,23 +199,54 @@ class CartController extends Controller
             $order->customer_id = $customer->id;
             $order->save();
 
+        }else {
+            $customer = Customer::where('email', $request->email)->first();
+            if(!$customer){
+                $customer = Customer::create([
+                    'firstname' => $request->firstname,
+                    'lastname' => $request->lastname,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    'country' => $request->country,
+                    'city' => $request->city,
+                    'zipcode' => $request->zipcode,
+                    'notes' => $request->notes ?? 'Nothing',
+                    'status' => 1,
+                    'password' => Hash::make('guest123'), // guest
+
+                    'ship_firstname' => $request->boolean('is_shipping') ? $request->ship_firstname : $request->firstname,
+                    'ship_lastname'  => $request->boolean('is_shipping') ? $request->ship_lastname : $request->lastname,
+                    'ship_phone'     => $request->boolean('is_shipping') ? $request->ship_phone : $request->phone,
+                    'ship_email'     => $request->boolean('is_shipping') ? $request->ship_email : $request->email,
+                    'ship_address'   => $request->boolean('is_shipping') ? $request->ship_address : $request->address,
+                    'ship_country'   => $request->boolean('is_shipping') ? $request->ship_country : $request->country,
+                    'ship_city'      => $request->boolean('is_shipping') ? $request->ship_city : $request->city,
+                    'ship_zipcode'   => $request->boolean('is_shipping') ? $request->ship_zipcode : $request->zipcode,
+                ]);
+                $order->customer_id = $customer->id;
+                $order->save();
+            }
         }
         $order->status = 1;
         $order->order_date = now();
         $shipping = $total_amount * 0.05;
         $order->total_amount = $total_amount + $shipping;
         $order->save();
+        // session(['order' => $order]);
         session()->forget('cart');
-        return redirect()->route('cart.completed')->with(['ordered' => $cart]);
+        return redirect()->route('cart.completed')->with(['ordered' => $cart,'order' => $order]);
     }
 
     function orderCompleted()
     {
-        $ordered = session('ordered');
-        if(!$ordered)
+        $order = session('order');
+        $ordered = collect(session('ordered',[])); //cart
+        if(!$order)
             { return redirect()->route('product.cart');}
         return view('frontend.product.cart.completed',[
             'categories' => Category::all(),
+            'order' => $order,
             'ordered' => $ordered
         ]);
     }
