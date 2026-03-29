@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Customer extends Model
+class Customer extends Authenticatable
 {
     use HasFactory, Notifiable;
     protected $fillable = [
@@ -43,6 +43,10 @@ class Customer extends Model
     function orders()
     {
         return $this->hasMany(Order::class);
+    }
+    function getFullNameAttribute()
+    {
+        return $this->firstname . ' ' . $this->lastname;
     }
 
 }

@@ -70,6 +70,18 @@ class Product extends Model
                     ->where('id', '!=', $product->id)->take(4)->get();
     }
 
+    /**
+     * Summary of search
+     * @param LengthAwarePaginator $keyword
+     * @return LengthAwarePaginator
+     */
+    static function search($keyword)
+    {
+        return self::where('name', 'like', "%$keyword%")
+                    ->orWhere('description', 'like', "%$keyword%")
+                    ->paginate(8);
+    }
+
 }
 
 

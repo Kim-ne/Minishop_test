@@ -103,6 +103,11 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-12 form-group">
+                                        <label>Notes</label>
+                                        <input class="form-control" type="text" placeholder="Notes" name="notes"
+                                            value={{ old('notes') }}>
+                                    </div>
+                                <div class="col-md-12 form-group">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="newaccount" name="is_create"
                                             data-toggle="collapse" data-target="#newaccount">

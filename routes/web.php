@@ -3,6 +3,7 @@
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\ProductController;
+use App\Http\Controllers\frontend\AuthController;
 use Illuminate\Support\Facades\Route;
 
 //route for home page
@@ -19,6 +20,18 @@ Route::put('/cart/update/{id}', [CartController::class,'updateCart'])->name('car
 Route::get('/checkout',[CartController::class,'order'])->name('cart.checkout');
 Route::post('/checkout',[CartController::class, 'orderPost'])->name('cart.orderpost');
 Route::get('/cart-completed', [CartController::class,'orderCompleted'])->name('cart.completed');
+
+//middleware for auth
+Route::middleware(['auth-customer'])->group(function () {
+    Route::get('/profile', [AuthController::class,'profile'])->name('profile');
+    Route::get('/logout', [AuthController::class,'logout'])->name('logout');
+
+});
+
+//route for login
+Route::get('/login', [AuthController::class,'login'])->name('login');
+Route::post('/login', [AuthController::class,'loginPost'])->name('login.post');
+
 
 //search route
 Route::get('/search', [ProductController::class,'search'])->name('search');

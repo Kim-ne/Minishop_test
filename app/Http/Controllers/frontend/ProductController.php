@@ -62,10 +62,7 @@ class ProductController extends Controller
     function search(Request $request)
     {
         $keyword = $request->keyword;
-        $products = Product::where('name', 'like', "%$keyword%")
-                ->orWhere('description', 'like', "%$keyword%")
-                ->paginate(8);
-
+        $products = $this->ProductService->search($keyword);
         return view('frontend.product.search', [
             'products' => $products,
             'keyword' => $keyword,

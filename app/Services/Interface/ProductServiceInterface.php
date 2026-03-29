@@ -14,4 +14,11 @@ interface ProductServiceInterface
     public function getListCategory(): mixed;
     public function detail($alias): mixed;
     public function getRelatedProduct(Product $product): mixed;
+
+    /**
+     * Get search bar
+     * @param mixed $keyword
+     * @return mixed
+     */
+    public function search($keyword): mixed;
 }

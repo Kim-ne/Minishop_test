@@ -139,9 +139,9 @@ class CartController extends Controller
             return redirect()->route('product.cart')->with('error', 'Cart is empty');
         }
         $request->validate([
-            'firstname' => 'required|max:50|min:4',
-            'lastname' => 'required|max:50|min:4',
-            'email' => 'required|email|max:100',
+            'firstname' => 'required|max:50|min:2',
+            'lastname' => 'required|max:50|min:2',
+            'email' => 'required|email|max:50',
             'phone' => 'required|numeric|digits_between:9,15',
             'address' => 'required|max:100',
             'country' => 'required|max:50|string',
@@ -155,14 +155,16 @@ class CartController extends Controller
         $order = Order::create($fillable);
         $total_amount = 0;
         foreach($cart as $item){
-           $fillitem = [
+            $price = (float)$item->price;
+            $qty = (int)$item->buy_qty;
+            $fillitem = [
                'order_id' => $order->id,
                'product_id' => $item->id,
-               'qty' => $item->buy_qty,
-               'price' => $item->price,
-           ];
-           $total_amount += $item->price * $item->buy_qty;
-           OrderProduct::create($fillitem);
+               'qty' => $qty,
+               'price' => $price,
+            ];
+            $total_amount += $item->price * $item->buy_qty;
+            OrderProduct::create($fillitem);
         }
         if($request -> is_create){
             $customer = new Customer();
@@ -174,6 +176,9 @@ class CartController extends Controller
             $customer->country = $request->country;
             $customer->city = $request->city;
             $customer->zipcode = $request->zipcode;
+            $customer->status = 1;
+            $customer->notes = $request->notes ?? 'Nothing';
+
             // Customer dont have ship address
             $customer->ship_firstname = $request->firstname;
             $customer->ship_lastname = $request->lastname;
@@ -183,6 +188,7 @@ class CartController extends Controller
             $customer->ship_country = $request->country;
             $customer->ship_city = $request->city;
             $customer->ship_zipcode = $request->zipcode;
+
             // Have ship address
             if($request->is_shipping){
                 $customer->ship_firstname = $request->ship_firstname;

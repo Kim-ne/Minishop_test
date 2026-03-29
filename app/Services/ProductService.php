@@ -37,4 +37,14 @@ class ProductService implements ProductServiceInterface
     {
         return Product::getRelated($product);
     }
+
+    /**
+     * Get search bar
+     * @param LengthAwarePaginator $keyword
+     * @return LengthAwarePaginator
+     */
+    public function search($keyword) : LengthAwarePaginator
+    {
+        return Product::search($keyword);
+    }
 }

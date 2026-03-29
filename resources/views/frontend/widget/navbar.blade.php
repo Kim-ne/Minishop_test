@@ -50,6 +50,16 @@
                         <a href="contact.html" class="nav-item nav-link">Contact</a>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
+                        <div class="row">
+                        <div class="pr-3">
+                        @auth
+                            <a href="{{ route('profile') }}" class="mr-2">Hello: {{ auth()->user()->fullname }}</a>
+                            <a href="{{ route('logout') }}" class="btn btn-primary"> Logout </a>
+                        @else
+                            <a href="{{ route('login') }}" class="btn btn-primary"> Login </a>
+                        @endauth
+                        </div>
+
                         <a href="" class="btn px-0">
                             <i class="fas fa-heart text-primary"></i>
                             <span class="badge text-secondary border border-secondary rounded-circle"
@@ -60,6 +70,7 @@
                             <span class="badge text-secondary border border-secondary rounded-circle"
                                 style="padding-bottom: 2px;">{{ count(session('cart',[])) }}</span>
                         </a>
+                        </div>
                     </div>
                 </div>
             </nav>

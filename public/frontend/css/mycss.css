@@ -4,3 +4,12 @@
     align-items: center;
     margin-left: 30px;
 }
+
+.btn-login{
+    border-radius: 15px;
+};
+
+input.form-control.form-login{
+    border: 1px solid #ced4da;
+    border-radius: 15px !important;
+};
