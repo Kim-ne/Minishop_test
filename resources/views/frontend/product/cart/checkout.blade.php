@@ -124,7 +124,6 @@
                                                 <input type="text" class="form-control" placeholder="Re-enter password">
                                             </div>
                                         </div>
-
                                     </div>
 
                                 </div>

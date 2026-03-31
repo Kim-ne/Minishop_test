@@ -16,7 +16,7 @@
         <!-- Breadcrumb End -->
 
         <!-- Login Start -->
-        <form action="{{ route('login.post') }}" method="post">
+        <form action="{{ route('adminLogin.post') }}" method="post">
             @csrf
             <div class="container-fluid">
                 <div class="row px-xl-5">
@@ -34,8 +34,8 @@
                             <div class="row">
                                 <div class="col-md-12 form-group py-3">
                                     <input class="form-control" style="border-radius:15px" type="text"
-                                        placeholder="ID/Username" name="username" value="{{ old('username') }}">
-                                    @error('username')
+                                        placeholder="ID/Username" name="name" value="{{ old('name') }}">
+                                    @error('name')
                                         <div class="text-danger">{{$message}}</div>
                                     @enderror
                                 </div>

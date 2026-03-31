@@ -8,5 +8,7 @@
 <script src="{{ asset('frontend/mail/jqBootstrapValidation.min.js') }}"></script>
 <script src="{{ asset('frontend/mail/contact.js') }}"></script>
 
+
 <!-- Template Javascript -->
 <script src="{{ asset('frontend/js/main.js') }}"></script>
+<script src="{{ asset('frontend/js/my.js') }}"></script>

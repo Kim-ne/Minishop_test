@@ -47,6 +47,6 @@
                 </div>
             </div>
         {{-- </form> --}}
-        <!-- Login End -->
+        <!-- Profile End -->
     </body>
 @endsection
