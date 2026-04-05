@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Interface;
+namespace App\Services;
 
 use App\Models\Product;
 
@@ -21,4 +21,6 @@ interface ProductServiceInterface
      * @return mixed
      */
     public function search($keyword): mixed;
+
+    public function getProductByStatusAndId(string|int $id): mixed;
 }

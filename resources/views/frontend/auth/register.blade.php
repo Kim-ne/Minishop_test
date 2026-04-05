@@ -63,7 +63,7 @@
                             <input type="text"
                                    name="password"
                                    class="form-control @error('password') is-invalid @enderror"
-                                   data-bs-toggle="tooltip"
+                                   data-bs-toggle="tooltip" data-placement="top"
                                    title="Password at least 8 characters, 1 number and 1 uppercase letter"
                                    placeholder="Password"
                                    required>

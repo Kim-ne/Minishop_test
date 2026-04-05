@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Services\Interface\ProductServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -20,10 +19,12 @@ class ProductService implements ProductServiceInterface
     {
         return Product::getListProductPage();
     }
+
     public function getListCategory(): Collection
     {
         return Category::getList();
     }
+    
     public function detail($alias): mixed
     {
         $product = Product::detail($alias);
@@ -35,7 +36,7 @@ class ProductService implements ProductServiceInterface
 
     public function getRelatedProduct(Product $product): Collection
     {
-        return Product::getRelated($product);
+        return Product::getRelatedProduct($product);
     }
 
     /**
@@ -46,5 +47,10 @@ class ProductService implements ProductServiceInterface
     public function search($keyword) : LengthAwarePaginator
     {
         return Product::search($keyword);
+    }
+
+    public function getProductByStatusAndId(string|int $id): mixed
+    {
+        return Product::getProductByStatusAndId($id);
     }
 }

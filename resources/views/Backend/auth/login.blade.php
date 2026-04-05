@@ -16,7 +16,7 @@
         <!-- Breadcrumb End -->
 
         <!-- Login Start -->
-        <form action="{{ route('adminLogin.post') }}" method="post">
+        <form action="{{ route('userLogin.post') }}" method="post">
             @csrf
             <div class="container-fluid">
                 <div class="row px-xl-5">

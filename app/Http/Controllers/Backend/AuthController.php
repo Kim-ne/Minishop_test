@@ -16,7 +16,7 @@ class AuthController extends Controller
     /**
      * Login page
     */
-    function adminLogin()
+    function userLogin()
     {
         return view('Backend.auth.login',
         ['categories' => Category::all()]);
@@ -27,7 +27,7 @@ class AuthController extends Controller
       * @param Request $request
       * @return \Illuminate\Http\RedirectResponse
     */
-    function adminLoginPost(Request $request)
+    function userLoginPost(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|max:50',
@@ -54,19 +54,5 @@ class AuthController extends Controller
     }
 
 
-    /** Logout */
-
-    function adminLogout()
-    {
-        Auth::guard('user')->logout();
-        return redirect()->route('home');
-    }
-
-    /** Profile */
-    function adminProfile()
-    {
-        return view('Backend.auth.profile',
-        ['categories' => Category::all()]);
-    }
 
 }

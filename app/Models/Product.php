@@ -11,6 +11,9 @@ use Ramsey\Collection\Collection;
 class Product extends Model
 {
     use HasFactory,Notifiable;
+
+    const STATUS_ACTIVE = 1;
+
     function category()
     {
         return $this->belongsTo(Category::class);
@@ -50,13 +53,6 @@ class Product extends Model
     {
         $productDetail = self::where(['status'=>1, 'alias'=>$alias])->first();
         return $productDetail;
-        // if(!$productDetail){
-        //     redirect()->route('product.index')->with('error', 'Product not found');
-        // }
-        // $related = Product::where('status',1 )
-        //                     ->where('category_id', $productDetail->category_id)
-        //                     ->where('id', '!=', $productDetail->id)->take(4)->get();
-        // return self::with('category')->where('alias', $alias)->first();
     }
 
     /**
@@ -64,7 +60,7 @@ class Product extends Model
      * @param mixed $product
      * @return mixed
      */
-    static function getRelated($product)
+    static function getRelatedProduct($product)
     {
         return self::where('category_id', $product->category_id)
                     ->where('id', '!=', $product->id)->take(4)->get();
@@ -80,6 +76,11 @@ class Product extends Model
         return self::where('name', 'like', "%$keyword%")
                     ->orWhere('description', 'like', "%$keyword%")
                     ->paginate(8);
+    }
+
+    public static function getProductByStatusAndId(string|int $id)
+    {
+        return self::where(['status'=>self::STATUS_ACTIVE, 'id'=>$id])->first();
     }
 
 }

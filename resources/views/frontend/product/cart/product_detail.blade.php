@@ -123,8 +123,8 @@
                                         <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
-                                <input type="number" class="form-control bg-secondary border-0 text-center" value="1"
-                                min="1" max="99" name="qty">
+                                <input type="text" class="form-control bg-secondary border-0 text-center" value="1"
+                                min="1" max="99" name="qty" disabled>
                                 <div class="input-group-btn">
                                     <button class="btn btn-primary btn-plus" type="button"
                                     onclick="this.previousElementSibling.value = praseInt(this.nextElementSibling.value) + 1 ">

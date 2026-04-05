@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthAdminMiddleware
+class AuthUserMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,7 +19,7 @@ class AuthAdminMiddleware
         if(Auth::guard('user')->check()){
             return $next($request);
         } else{
-            return redirect()->route('admin.login')->with('error', 'Please login first');
+            return redirect()->route('user.login')->with('error', 'Please login first');
         }
 
     }

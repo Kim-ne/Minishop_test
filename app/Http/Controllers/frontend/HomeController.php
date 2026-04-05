@@ -4,7 +4,7 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Services\Interface\HomeServiceInterface;
+use App\Services\HomeServiceInterface;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller

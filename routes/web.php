@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\AuthController as BackendAuthController;
+use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\ProductController;
@@ -30,15 +31,17 @@ Route::middleware(['auth-customer'])->group(function () {
 
 });
 
-Route::middleware(['auth-admin'])->group(function () {
-    Route::get('/admin/profile', [BackendAuthController::class,'adminProfile'])->name('admin.profile');
-    Route::get('/admin/logout', [BackendAuthController::class,'adminLogout'])->name('admin.logout');
+Route::middleware(['auth-user'])->group(function () {
+    Route::get('/user/profile', [ProfileController::class,'adminProfile'])->name('user.profile');
+    Route::put('/user/profile/info', [ProfileController::class,'updateProfile'])->name('userProfile.update');
+    Route::put('/user/profile/password', [ProfileController::class,'updatePassword'])->name('userPassword.update');
+    Route::get('/user/logout', [ProfileController::class,'adminLogout'])->name('user.logout');
 
 });
 
 // Route admin login
-Route::get('/admin/login', [BackendAuthController::class,'adminLogin'])->name('admin.login');
-Route::post('/admin/login', [BackendAuthController::class,'adminLoginPost'])->name('adminLogin.post');
+Route::get('/user/login', [BackendAuthController::class,'adminLogin'])->name('user.login');
+Route::post('/user/login', [BackendAuthController::class,'adminLoginPost'])->name('userLogin.post');
 
 //route for login
 Route::get('/login', [AuthController::class,'login'])->name('login');

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
-use App\Services\Interface\ProductServiceInterface;
+use App\Services\ProductServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
