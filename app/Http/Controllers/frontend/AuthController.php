@@ -3,133 +3,93 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginPostRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\Category;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Services\AuthServiceInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+
+
+
+
 
 class AuthController extends Controller
 {
+
+    public function __construct(
+        protected AuthServiceInterface $authService,
+    ) {}
+
     /**
      * Login page
     */
     function login()
     {
+        $this->authService->login();
+
         return view('frontend.auth.login',
         ['categories' => Category::all()]);
     }
 
     /**
-     * Login post for customer
+     * LoginPost for customer
     */
-    function loginPost(Request $request)
+    function loginPost(LoginPostRequest $request)
     {
-        $validated = $request->validate([
-            'username' => 'required|email|max:50',
-            'password' => 'required|max:50',
-            'remember' => 'boolean'
-        ]);
+        try
+        {
+            $this->authService->loginPost($request);
 
-        $cer = Auth::guard('buyer')->attempt([
-            'email' => $validated['username'],
-            'password' => $request->password
-        ], $request->boolean('remember'));
+            return redirect()->route('home')->with('success', 'Login success');
 
-        if($cer){
-            if(Auth::user()->status == 1){
-                $request->session()->regenerate();
-                $request->session()->regenerateToken();
-                return redirect()->route('home');
-            } else{
-            Auth::guard('buyer')->logout();
-            return redirect()->back()->with('error', 'Invalid username or password');
-            }
-        };
-        return redirect()->back()->with('error', 'Login success');
+        } catch (\Exception $e)
+        {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
-     /**
-      * Sumary Login Post for admin
-      * @param Request $request
-      * @return \Illuminate\Http\RedirectResponse
-      */
-     function adminLoginPost(Request $request)
+    /* Profile */
+    function profile()
     {
-        $validated = $request->validate([
-            'name' => 'required|email|max:50',
-            'password' => 'required|max:50',
-            'remember' => 'boolean'
-        ]);
+        $this->authService->profile();
 
-        $cer = Auth::guard('user')->attempt([
-            'email' => $validated['name'],
-            'password' => $request->password
-        ], $request->boolean('remember'));
-
-        if($cer){
-            if(Auth::user()->status == 1){
-                $request->session()->regenerate();
-                $request->session()->regenerateToken();
-                return redirect()->route('home');
-            } else{
-            Auth::guard('user')->logout();
-            return redirect()->back()->with('error', 'Invalid username or password');
-            }
-        };
-        return redirect()->back()->with('error', 'Login success');
+        return view('frontend.auth.profile',
+        ['categories' => Category::all()]);
     }
-
-
+    
     /** Logout */
 
     function logout()
     {
-        Auth::guard('buyer')->logout();
+        $this->authService->logout();
+
         return redirect()->route('home');
     }
 
-    /** Profile */
-    function profile()
+    function register()
     {
-        return view('frontend.auth.profile',
-        ['categories' => Category::all()]);
-    }
+        $this->authService->register();
 
-    function register(){
         return view('frontend.auth.register',
         ['categories' => Category::all()]);
     }
 
-    function registerPost(Request $request){
-        $validated = $request->validate([
-            'name' => 'required|max:50|min:4',
-            'email' => 'required|email|unique:users,email|max:100',
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(8)->letters()->mixedCase()->numbers()
-            ],
-            'password_confirmation' => 'required',
-            'email_confirmation' => 'required|email|same:email',
-            'phone' => 'digits_between:9,15|nullable',
-            'country'=>'max:50|min:2|string|nullable',
-        ]);
+    function registerPost(RegisterRequest $request)
+    {
+        try
+        {
+            $user = $this->authService->registerPost($request);
 
-        $users = User::create([
-                    'name' => $validated['name'],
-                    'email' => $validated['email'],
-                    'password' => Hash::make($validated['password']),
-                    'phone' => $validated['phone'] ?? null,
-                    'country' => $validated['country'] ?? null,
-            ]);
+            Auth::guard('buyer')->login($user);
+            $request->session()->regenerate();
 
+            return redirect()->route('home')->with('success', 'Registration success');
 
-        Auth::guard('user')->login($users);
-        $request->session()->regenerate();
-        return redirect()->route('home')->with('success', 'Registration success');
+        } catch (\Exception $e)
+        {
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
+
 
     }
 }

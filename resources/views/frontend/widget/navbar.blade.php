@@ -54,10 +54,10 @@
                         <div class="pr-3">
                         @if(auth()->guard('buyer')->check())
                             <a href="{{ route('profile') }}" class="mr-2" style="color: white">
-                                Hello: {{ auth()->user()->fullname }}</a>
+                                Hello: {{ auth()->guard('buyer')->user()->fullname }}</a>
                             <a href="{{ route('logout') }}" class="btn btn-primary"> Logout </a>
                         @elseif(auth()->guard('user')->check())
-                            <a href="{{ route('admin.profile') }}" class="mr-2" style="color: white">
+                            <a href="{{ route('user.profile') }}" class="mr-2" style="color: white">
                                 Hello admin: {{ auth()->guard('user')->user()->name }}</a>
                             <a href="{{ route('logout') }}" class="btn btn-primary"> Logout </a>
                         @else

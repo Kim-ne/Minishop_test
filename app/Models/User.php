@@ -45,4 +45,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    static function nameExists(string $name):bool
+    {
+        return self::where('name', $name)->exists();
+    }
+
+    static function emailExists(string $email):bool
+    {
+        return self::where('email', $email)->exists();
+    }
 }

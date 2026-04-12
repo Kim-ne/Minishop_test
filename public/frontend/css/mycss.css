@@ -13,3 +13,65 @@ input.form-control.form-login{
     border: 1px solid #ced4da;
     border-radius: 15px !important;
 };
+
+.position-relative {
+    position: relative;
+}
+
+/* css for toggle password visibility (change password field) */
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 52px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    z-index: 10;
+}
+
+.toggle-password i {
+    font-size: 18px;
+}
+
+.form-control.is-invalid + .toggle-password {
+    right: 35px;
+}
+
+/* css for toggle password visibility (login field) */
+.toggle-password.login {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    z-index: 10;
+}
+
+.toggle-password.login i {
+    font-size: 18px;
+}
+
+.form-control.is-invalid + .toggle-password.login {
+    right: 50px;
+}
+
+/* css for toggle password visibility (register field) */
+.toggle-password.register {
+    position: absolute;
+    right: 25px;
+    top: 52px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    z-index: 10;
+}
+
+.toggle-password.register i {
+    font-size: 18px;
+}
+
+.form-control.is-invalid + .toggle-password.register {
+    right: 50px;
+}
+

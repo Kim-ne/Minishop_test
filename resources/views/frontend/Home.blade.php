@@ -5,7 +5,6 @@
 
 
 <body>
-
     <!-- Carousel Start -->
     <div class="container-fluid mb-3">
         <div class="row px-xl-5">

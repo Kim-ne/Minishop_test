@@ -17,10 +17,12 @@ class AuthCustomerMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         //check login
-        if(Auth::guard('buyer')->check()){
-        return $next($request);
-        } else{
-        return redirect()->route('login')->with('error', 'Please login first');
+        if(Auth::guard('buyer')->check())
+        {
+            return $next($request);
+        } else
+        {
+            return redirect()->route('login')->with('error', 'Please login first');
         }
     }
 }

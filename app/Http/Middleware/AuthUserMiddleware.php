@@ -16,9 +16,11 @@ class AuthUserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::guard('user')->check()){
+        if(Auth::guard('user')->check())
+        {
             return $next($request);
-        } else{
+        } else
+        {
             return redirect()->route('user.login')->with('error', 'Please login first');
         }
 

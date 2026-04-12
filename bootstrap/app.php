@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Middleware\AuthAdminMiddleware;
 use App\Http\Middleware\AuthCustomerMiddleware;
 use App\Http\Middleware\AuthUserMiddleware;
-use Illuminate\Container\Attributes\Auth;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,8 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias(['auth-customer'=> AuthCustomerMiddleware::class]);
-        $middleware->alias(['auth-user'=> AuthuserMiddleware::class]);
+        $middleware->alias(['auth.customer' => AuthCustomerMiddleware::class,
+                            'auth.user' => AuthUserMiddleware::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

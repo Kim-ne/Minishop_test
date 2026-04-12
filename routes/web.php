@@ -6,7 +6,7 @@ use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\ProductController;
 use App\Http\Controllers\frontend\AuthController;
-
+use App\Http\Controllers\frontend\ProfileController as FrontendProfileController;
 use Illuminate\Support\Facades\Route;
 
 //route for home page
@@ -25,13 +25,15 @@ Route::post('/checkout',[CartController::class, 'orderPost'])->name('cart.orderp
 Route::get('/cart-completed', [CartController::class,'orderCompleted'])->name('cart.completed');
 
 //middleware for auth-cusstomer
-Route::middleware(['auth-customer'])->group(function () {
-    Route::get('/profile', [AuthController::class,'profile'])->name('profile');
+Route::middleware(['auth.customer'])->group(function () {
+    Route::get('/profile', [FrontendProfileController::class,'profile'])->name('profile');
+    Route::put('/profile/info', [FrontendProfileController::class,'infoUpdate'])->name('info.update');
     Route::get('/logout', [AuthController::class,'logout'])->name('logout');
+    Route::put('/profile/password', [FrontendProfileController::class,'passwordUpdate'])->name('password.update');
 
 });
 
-Route::middleware(['auth-user'])->group(function () {
+Route::middleware(['auth.user'])->group(function () {
     Route::get('/user/profile', [ProfileController::class,'adminProfile'])->name('user.profile');
     Route::put('/user/profile/info', [ProfileController::class,'updateProfile'])->name('userProfile.update');
     Route::put('/user/profile/password', [ProfileController::class,'updatePassword'])->name('userPassword.update');
@@ -39,7 +41,7 @@ Route::middleware(['auth-user'])->group(function () {
 
 });
 
-// Route admin login
+// Route user login
 Route::get('/user/login', [BackendAuthController::class,'adminLogin'])->name('user.login');
 Route::post('/user/login', [BackendAuthController::class,'adminLoginPost'])->name('userLogin.post');
 

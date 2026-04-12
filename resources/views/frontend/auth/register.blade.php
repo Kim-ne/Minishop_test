@@ -60,13 +60,16 @@
                         <div class="col-md-6 form-group">
                             <label>Password <span class="text-danger">*</span></label>
 
-                            <input type="text"
+                            <input type="password"
                                    name="password"
                                    class="form-control @error('password') is-invalid @enderror"
                                    data-bs-toggle="tooltip" data-placement="top"
                                    title="Password at least 8 characters, 1 number and 1 uppercase letter"
-                                   placeholder="Password"
+                                   placeholder="Password" id="password"
                                    required>
+                            <span class="toggle-password register" data-target="#password">
+                                <i class="fa fa-eye"></i>
+                            </span>
 
                             @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -77,11 +80,18 @@
                         <div class="col-md-6 form-group">
                             <label>Re-Password <span class="text-danger">*</span></label>
 
-                            <input type="text"
-                                   name="password_confirmation"
-                                   class="form-control"
+                            <input type="password"
+                                   name="password_confirmation" id="password_confirmation"
+                                   class="form-control @error('password_confirmation') is-invalid @enderror"
                                    placeholder="Re-Password"
                                    required>
+                            <span class="toggle-password register" data-target="#password_confirmation">
+                                <i class="fa fa-eye"></i>
+                            </span>
+
+                            @error('password_confirmation')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- EMAIL --}}
