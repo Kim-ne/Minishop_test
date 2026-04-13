@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\Backend\AuthController as BackendAuthController;
-use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\ProfileController as BackendProfileController;
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\ProductController;
-use App\Http\Controllers\frontend\AuthController;
+use App\Http\Controllers\frontend\AuthController as FrontendAuthController;
 use App\Http\Controllers\frontend\ProfileController as FrontendProfileController;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 
 //route for home page
@@ -24,32 +25,35 @@ Route::get('/checkout',[CartController::class,'order'])->name('cart.checkout');
 Route::post('/checkout',[CartController::class, 'orderPost'])->name('cart.orderpost');
 Route::get('/cart-completed', [CartController::class,'orderCompleted'])->name('cart.completed');
 
-//middleware for auth-cusstomer
+//middleware for auth-customer
 Route::middleware(['auth.customer'])->group(function () {
     Route::get('/profile', [FrontendProfileController::class,'profile'])->name('profile');
     Route::put('/profile/info', [FrontendProfileController::class,'infoUpdate'])->name('info.update');
-    Route::get('/logout', [AuthController::class,'logout'])->name('logout');
+    Route::get('/logout', [FrontendAuthController::class,'logout'])->name('logout');
     Route::put('/profile/password', [FrontendProfileController::class,'passwordUpdate'])->name('password.update');
 
 });
 
-Route::middleware(['auth.user'])->group(function () {
-    Route::get('/user/profile', [ProfileController::class,'adminProfile'])->name('user.profile');
-    Route::put('/user/profile/info', [ProfileController::class,'updateProfile'])->name('userProfile.update');
-    Route::put('/user/profile/password', [ProfileController::class,'updatePassword'])->name('userPassword.update');
-    Route::get('/user/logout', [ProfileController::class,'adminLogout'])->name('user.logout');
+//middleware for auth-user
+Route::prefix('user')->middleware(['auth.user'])->group(function () {
+    Route::get('/profile', [BackendProfileController::class,'userProfile'])->name('userProfile');
+    Route::put('/profile/info', [BackendProfileController::class,'userInfoUpdate'])->name('userInfo.update');
+    Route::put('/profile/password', [BackendProfileController::class,'userPasswordUpdate'])->name('userPassword.update');
+    Route::get('/logout', [BackendAuthController::class,'userLogout'])->name('user.logout');
 
 });
 
 // Route user login
-Route::get('/user/login', [BackendAuthController::class,'adminLogin'])->name('user.login');
-Route::post('/user/login', [BackendAuthController::class,'adminLoginPost'])->name('userLogin.post');
+Route::get('/user/login', [BackendAuthController::class,'userLogin'])->name('user.login');
+Route::post('/user/login', [BackendAuthController::class,'userLoginPost'])->name('userLogin.post');
+Route::get('/user/register', [BackendAuthController::class,'userRegister'])->name('userRegister');
+Route::post('/user/register', [BackendAuthController::class,'userRegisterPost'])->name('userRegister.post');
 
 //route for login
-Route::get('/login', [AuthController::class,'login'])->name('login');
-Route::post('/login', [AuthController::class,'loginPost'])->name('login.post');
-Route::get('/register', [AuthController::class,'register'])->name('register');
-Route::post('/register', [AuthController::class,'registerPost'])->name('register.post');
+Route::get('/login', [FrontendAuthController::class,'login'])->name('login');
+Route::post('/login', [FrontendAuthController::class,'loginPost'])->name('login.post');
+Route::get('/register', [FrontendAuthController::class,'register'])->name('register');
+Route::post('/register', [FrontendAuthController::class,'registerPost'])->name('register.post');
 
 
 //search route

@@ -3,56 +3,81 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginPostRequest;
 use App\Models\Category;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Services\AuthServiceInterface;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
+    public function __construct
+    (
+        protected AuthServiceInterface $authService,
+    )
+    {}
     /**
      * Login page
     */
     function userLogin()
     {
+        $this->authService->login();
+
         return view('Backend.auth.login',
         ['categories' => Category::all()]);
     }
 
     /**
       * Sumary Login Post for admin
-      * @param Request $request
+      * @param LoginPostRequest $request
       * @return \Illuminate\Http\RedirectResponse
     */
-    function userLoginPost(Request $request)
+    function userLoginPost(LoginPostRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|max:50',
-            'password' => 'required|max:50',
-            'remember' => 'boolean'
-        ]);
+        try
+        {
+            $this->authService->userLoginPost($request);
 
-        $cer = Auth::guard('user')->attempt([
-            'name' => $validated['name'],
-            'password' => $request->password
-        ], $request->boolean('remember'));
+            return redirect()->route('home')->with('success', 'Login success');
 
-        if($cer){
-            if(Auth::guard('user')->user()->status == 1){
-                $request->session()->regenerate();
-                $request->session()->regenerateToken();
-                return redirect()->route('home');
-            } else{
-            Auth::guard('user')->logout();
-            return redirect()->back()->with('error', 'Invalid username or password');
-            }
-        };
-        return redirect()->back()->with('error', 'Login failed');
+        } catch (\Exception $e)
+        {
+            return redirect()->back()
+                            ->withInput($request->only('email'))->with('error', $e->getMessage());
+        }
+     }
+
+    function userLogout()
+    {
+        $this->authService->userLogout();
+
+        return redirect()->route('home')->with('success', 'Logout success');
     }
 
+    function userRegister()
+    {
+        $this->authService->userRegister();
+
+        return view('Backend.auth.register',
+        ['categories' => Category::all()]);
+    }
+
+    function userRegisterPost(RegisterRequest $request)
+    {
+         try
+        {
+            $user = $this->authService->userRegisterPost($request);
+
+            Auth::guard('user')->login($user);
+            $request->session()->regenerate();
+
+            return redirect()->route('home')->with('success', 'Registration success');
+
+        } catch (\Exception $e)
+        {
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
+    }
 
 
 }

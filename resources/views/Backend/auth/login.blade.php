@@ -33,15 +33,20 @@
                         <div class="bg-light p-30 mb-5 col-lg-6 offset-lg-3">
                             <div class="row">
                                 <div class="col-md-12 form-group py-3">
-                                    <input class="form-control" style="border-radius:15px" type="text"
-                                        placeholder="ID/Username" name="name" value="{{ old('name') }}">
-                                    @error('name')
+                                    <input class="form-control @error('username') is-invalid @enderror"
+                                        style="border-radius:15px" type="text"
+                                        placeholder="ID/Username" name="username" value="{{ old('username') }}">
+                                    @error('username')
                                         <div class="text-danger">{{$message}}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-12 form-group  ">
-                                    <input class="form-control " style="border-radius:15px" type="text"
-                                        placeholder="Password" name="password" value="">
+                                    <input class="form-control @error('password') is-invalid @enderror "
+                                        style="border-radius:15px" type="password"
+                                        placeholder="Password" name="password" value="{{ old('password') }}" id="password">
+                                    <span class="toggle-password login" data-target="#password">
+                                        <i class="fa fa-eye"></i>
+                                    </span>
                                     @error('password')
                                         <div class="text-danger">{{$message}}</div>
                                     @enderror
@@ -59,7 +64,7 @@
                                     <a class="btn btn-light btn-block btn-login" href="#">Forgot Password?</a>
                                 </div>
                                 <div class="col-md-12 form-group text-center">
-                                    <a class="btn btn-dark btn-block btn-login" href="{{ '/register' }}">Register</a>
+                                    <a class="btn btn-dark btn-block btn-login" href="{{ '/user/register' }}">Register</a>
                                 </div>
                             </div>
                         </div>

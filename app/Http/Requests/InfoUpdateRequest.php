@@ -23,7 +23,7 @@ class InfoUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => 'required|numeric|digits_between:9,15',
+            'phone' => 'nullable|numeric|digits_between:9,15',
             'country' => 'max:50|min:2|string|nullable',
         ];
     }

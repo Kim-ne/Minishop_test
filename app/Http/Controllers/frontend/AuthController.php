@@ -9,10 +9,6 @@ use App\Models\Category;
 use App\Services\AuthServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
-
-
-
-
 class AuthController extends Controller
 {
 
@@ -44,19 +40,11 @@ class AuthController extends Controller
 
         } catch (\Exception $e)
         {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()
+                            ->withInput($request->only('email'))->with('error', $e->getMessage());
         }
     }
 
-    /* Profile */
-    function profile()
-    {
-        $this->authService->profile();
-
-        return view('frontend.auth.profile',
-        ['categories' => Category::all()]);
-    }
-    
     /** Logout */
 
     function logout()
@@ -66,6 +54,8 @@ class AuthController extends Controller
         return redirect()->route('home');
     }
 
+    /* Register page
+    */
     function register()
     {
         $this->authService->register();
@@ -74,6 +64,8 @@ class AuthController extends Controller
         ['categories' => Category::all()]);
     }
 
+    /* Register Post for user
+    */
     function registerPost(RegisterRequest $request)
     {
         try

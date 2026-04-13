@@ -49,4 +49,8 @@ class Customer extends Authenticatable
         return $this->firstname . ' ' . $this->lastname;
     }
 
+    static function emailExists(string $email):bool
+    {
+        return self::where('email', $email)->exists();
+    }
 }

@@ -12,10 +12,18 @@ interface AuthServiceInterface
 
     public function loginPost(LoginPostRequest $request): mixed;
 
+    public function userLoginPost(LoginPostRequest $request): mixed;
+
     public function logout(): void;
+
+    public function userLogout(): void;
 
     public function register(): mixed;
 
+    public function userRegister(): mixed;
+
     public function registerPost(RegisterRequest $request): mixed;
+
+    public function userRegisterPost(RegisterRequest $request): mixed;
 
 }

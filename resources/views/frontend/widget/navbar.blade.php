@@ -56,10 +56,12 @@
                             <a href="{{ route('profile') }}" class="mr-2" style="color: white">
                                 Hello: {{ auth()->guard('buyer')->user()->fullname }}</a>
                             <a href="{{ route('logout') }}" class="btn btn-primary"> Logout </a>
+
                         @elseif(auth()->guard('user')->check())
-                            <a href="{{ route('user.profile') }}" class="mr-2" style="color: white">
+                            <a href="{{ route('userProfile') }}" class="mr-2" style="color: white">
                                 Hello admin: {{ auth()->guard('user')->user()->name }}</a>
-                            <a href="{{ route('logout') }}" class="btn btn-primary"> Logout </a>
+                            <a href="{{ route('user.logout') }}" class="btn btn-primary"> Logout </a>
+                            
                         @else
                             <a href="{{ route('login') }}" class="btn btn-primary"> Login </a>
                         @endif
