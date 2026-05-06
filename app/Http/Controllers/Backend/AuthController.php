@@ -7,6 +7,9 @@ use App\Http\Requests\LoginPostRequest;
 use App\Models\Category;
 use App\Services\AuthServiceInterface;
 use App\Http\Requests\RegisterRequest;
+use App\Models\Product;
+use App\Services\ProductService;
+use App\Services\ProductServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -14,17 +17,21 @@ class AuthController extends Controller
     public function __construct
     (
         protected AuthServiceInterface $authService,
+        protected ProductServiceInterface $productService,
     )
     {}
+
+
     /**
      * Login page
     */
     function userLogin()
     {
         $this->authService->login();
+        $category = $this->productService->getListCategory();
 
         return view('Backend.auth.login',
-        ['categories' => Category::all()]);
+        ['categories' => $category]);
     }
 
     /**
@@ -38,7 +45,7 @@ class AuthController extends Controller
         {
             $this->authService->userLoginPost($request);
 
-            return redirect()->route('home')->with('success', 'Login success');
+            return redirect()->route('user.dashboard')->with('success', 'Login success');
 
         } catch (\Exception $e)
         {
@@ -51,15 +58,16 @@ class AuthController extends Controller
     {
         $this->authService->userLogout();
 
-        return redirect()->route('home')->with('success', 'Logout success');
+        return redirect()->route('user.login')->with('success', 'Logout success');
     }
 
     function userRegister()
     {
         $this->authService->userRegister();
+        $category = $this->productService->getListCategory();
 
         return view('Backend.auth.register',
-        ['categories' => Category::all()]);
+        ['categories' => $category]);
     }
 
     function userRegisterPost(RegisterRequest $request)
@@ -71,13 +79,14 @@ class AuthController extends Controller
             Auth::guard('user')->login($user);
             $request->session()->regenerate();
 
-            return redirect()->route('home')->with('success', 'Registration success');
+            return redirect()->route('user.login')->with('success', 'Registration success');
 
         } catch (\Exception $e)
         {
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
+
 
 
 }

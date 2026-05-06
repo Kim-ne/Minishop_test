@@ -10,15 +10,18 @@ use Illuminate\Support\Collection;
 class Category extends Model
 {
     use HasFactory,Notifiable;
-    function product()
+
+    public function product()
     {
         return $this->hasMany(Product::class, 'category_id', 'id');
     }
-    function count()
+
+    public function count()
     {
         return $this->product()->count();
     }
-    static function getList():Collection
+
+    public static function getList():Collection
     {
         return self::withCount('product')
                     ->orderBy('name', 'asc')->take(8)->get();

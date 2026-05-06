@@ -28,7 +28,7 @@ class PasswordUpdateRequest extends FormRequest
         return [
             'current_password' =>
                         ['required',
-                        'current_password',
+                        'current_password:user',
                         ],
             'password' =>
                         ['required',
@@ -37,14 +37,23 @@ class PasswordUpdateRequest extends FormRequest
             'password_confirmation' => 'required|same:password',
         ];
     }
-    protected function failedValidation(Validator $validator)
-{
-    throw new HttpResponseException(
-        redirect()
-            ->route('profile', ['tab' => 'password'])
-            ->withErrors($validator)
-            ->withInput()
-    );
-}
+    // protected function failedValidation(Validator $validator)
+    // {
+    //     if(request()->is('profile/password'))
+    //     {
+    //         $redirectRoute = 'profile';
+    //         $redirectParams = ['tab' => 'password'];
+    //     } else {
+    //         $redirectRoute = 'userProfile';
+    //         $redirectParams = ['tab' => 'password'];
+    //     }
+
+    //     throw new HttpResponseException(
+    //         redirect()
+    //             ->route($redirectRoute, $redirectParams)
+    //             ->withErrors($validator)
+    //             ->withInput()
+    //     );
+    // }
 
 }

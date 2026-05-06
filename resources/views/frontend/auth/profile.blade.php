@@ -23,12 +23,12 @@
                 </h3>
                 <ul class="nav nav-tabs" >
                     <li class="nav-items">
-                        <a href="#info" data-toggle="tab"
-                        class="nav-link {{ request('tab') === 'info' || !request('tab') ? 'active' : '' }}">User Infomation</a>
+                        <abutton href="#info" data-toggle="tab"
+                        class="nav-link {{ request('tab') === 'info' || !request('tab') ? 'active' : '' }}">User Infomation</button>
                     </li>
                     <li class="nav-items">
-                        <a href="#password" data-toggle="tab"
-                        class="nav-link {{ request('tab') === 'password' ? 'active' : '' }}">Change password</a>
+                        <button href="#password" data-toggle="tab"
+                        class="nav-link {{ request('tab') === 'password' ? 'active' : '' }}">Change password</button    >
                     </li>
                 </ul>
                 @if(session('success'))
@@ -103,7 +103,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="form-group position-relative">
                                     <label> New password</label>
                                     <input type="password" class="form-control @error('password') is-invalid @enderror"

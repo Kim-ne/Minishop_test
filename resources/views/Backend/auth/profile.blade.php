@@ -1,211 +1,403 @@
-@extends('frontend.layout')
-@section('main_contain')
+@extends('Backend.layout')
+@section('admin_contain')
 
-    <!-- Breadcrumb Start -->
-    <div class="container-fluid">
-        <div class="row px-xl-5">
-            <div class="col-12">
-                <nav class="breadcrumb bg-light mb-30">
-                    <button class="breadcrumb-item text-dark" href="/">Home</button>
-                    <span class="breadcrumb-item active">Profile</span>
-                </nav>
-            </div>
-        </div>
-    </div>
-    <!-- Breadcrumb End -->
 
-    <!-- Profile Start -->
-    <div class="container-fluid">
-        <div class="row px-xl-5">
-            <div class="col-lg-12">
-                <h3 class="section-title position-relative text-uppercase mb-5 text-center">
-                    <span class="bg-secondary pr-3">Profile</span>
-                </h3>
-                <ul class="nav nav-tabs" >
-                    <li class="nav-items">
-                        <button href="#info" data-toggle="tab"
-                        class="nav-link {{ request('tab') === 'info' || !request('tab') ? 'active' : '' }}">User Infomation</button>
-                    </li>
-                    <li class="nav-items">
-                        <button href="#password" data-toggle="tab"
-                        class="nav-link {{ request('tab') === 'password' ? 'active' : '' }}">Change password</button>
-                    </li>
-                </ul>
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+    <div class="page-wrapper compact-wrapper " id="pageWrapper">
+        <!-- Page Header Start-->
+        @include('Backend.widget.pageheader')
+        <!-- Page Header Ends-->
 
-                @if(session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                <div class="tab-content mt-5 ">
-                <!-- tab infomation -->
-                    <div class="tab-pane fade {{ request('tab') === 'info' || !request('tab') ? 'show active' : '' }} " id="info">
-                        <div class="bg-light p-30 mb-5 col-lg-6 offset-lg-3 rounded ">
-                            <h4 class="text-center mb-3">Infomation</h4>
-
-                            <div class="row">
-                                <div class="col-md-12 mb-3">
-                                    <strong>Username: {{ auth()->guard('user')->user()->name }}</strong>
+        <!-- page-wrapper Start-->
+        <!-- Page Body Start-->
+        <div class="page-body-wrapper">
+            <!-- Page Sidebar Start-->
+            @include('Backend.widget.sidebar')
+            <!-- Page Sidebar Ends-->
+            <div class="page-body">
+                <!-- Container-fluid starts-->
+                <div class="container-fluid">
+                    <div class="user-profile">
+                        <div class="row">
+                            <!-- user profile first-style start-->
+                            <div class="col-sm-12">
+                                <div class="card hovercard text-center">
+                                    <div class="cardheader"></div>
+                                    <div class="user-image">
+                                        <div class="avatar"><img alt="" src="/Backend/assets/images/user/7.jpg"></div>
+                                        <div class="icon-wrapper"><a href="{{ route('editProfile') }}"><i class="icofont icofont-pencil-alt-5"></i></a></div>
+                                    </div>
+                                    <div class="info">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-lg-4 order-sm-1 order-xl-0">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="ttl-info text-start">
+                                                            <h6><i class="fa fa-envelope"></i>   Email</h6>
+                                                            <span>{{ Auth()->guard('user')->user()->email ?? 'empty'  }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="ttl-info text-start">
+                                                            <h6><i class="fa fa-calendar"></i>   BOD</h6><span>02 January
+                                                                1988</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-lg-4 order-sm-0 order-xl-1">
+                                                <div class="user-designation">
+                                                    <div class="title"><a
+                                                            href="#">{{ Auth()->guard('user')->user()->name }}</a></div>
+                                                    <div class="desc">Role</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-4 order-sm-2 order-xl-2">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="ttl-info text-start">
+                                                            <h6><i class="fa fa-phone"></i>   Contact Us</h6>
+                                                            <span> {{ Auth()->guard('user')->user()->phone }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="ttl-info text-start">
+                                                            <h6><i class="fa fa-location-arrow"></i>   Location</h6>
+                                                            <span>{{ Auth()->guard('user')->user()->country }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="social-media">
+                                            <ul class="list-inline">
+                                                <li class="list-inline-item"><a href="https://www.facebook.com/"
+                                                        target="_blank"><i class="fa fa-facebook"></i></a></li>
+                                                <li class="list-inline-item"><a href="https://accounts.google.com/"
+                                                        target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                                                <li class="list-inline-item"><a href="https://twitter.com/"
+                                                        target="_blank"><i class="fa fa-twitter"></i></a></li>
+                                                <li class="list-inline-item"><a href="https://www.instagram.com/"
+                                                        target="_blank"><i class="fa fa-instagram"></i></a></li>
+                                                <li class="list-inline-item"><a href="https://rss.app/" target="_blank"><i
+                                                            class="fa fa-rss"></i></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="follow">
+                                            <div class="row">
+                                                <div class="col-6 text-md-end border-right">
+                                                    <div class="follow-num counter">
+                                                        {{  rand(0, 10000)}}
+                                                    </div><span>Follower</span>
+                                                </div>
+                                                <div class="col-6 text-md-start">
+                                                    <div class="follow-num counter">{{  rand(0, 10000)}}</div>
+                                                    <span>Following</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="col-md-12 mb-3">
-                                    <strong>Email: </strong>
-                                    <span>{{ auth()->guard('user')->user()->email ?? 'empty' }}</span>
+                            </div>
+                            <!-- user profile first-style end-->
+                            <!-- user profile second-style start-->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="profile-img-style">
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="media"><img class="img-thumbnail rounded-circle me-3"
+                                                        src="/Backend/assets/images/user/7.jpg"
+                                                        alt="Generic placeholder image">
+                                                    <div class="media-body align-self-center">
+                                                        <h5 class="mt-0 user-name">{{ Auth()->guard('user')->user()->name }}
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 align-self-center">
+                                                <div class="float-sm-end"><small>10 Hours ago</small></div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <p>you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
+                                            anything
+                                            embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the
+                                            Internet
+                                            tend to repeat predefined chunks as necessary, making this the first true
+                                            generator
+                                            on the
+                                            Internet.</p>
+                                        <div class="img-container">
+                                            <div class="my-gallery" id="aniimated-thumbnials" itemscope="">
+                                                <figure itemprop="associatedMedia" itemscope=""><a
+                                                        href="/Backend/assets/images/other-images/profile-style-img3.png"
+                                                        itemprop="contentUrl" data-size="1600x950"><img
+                                                            class="img-fluid rounded"
+                                                            src="/Backend/assets/images/other-images/profile-style-img3.png"
+                                                            itemprop="thumbnail" alt="gallery"></a>
+                                                    <figcaption itemprop="caption description">Image caption 1</figcaption>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                        <div class="like-comment">
+                                            <ul class="list-inline">
+                                                <li class="list-inline-item border-right pe-3">
+                                                    <label class="m-0"><a href="#"><i
+                                                                class="fa fa-heart"></i></a>  Like</label><span
+                                                        class="ms-2 counter">{{  rand(0, 10000)}}</span>
+                                                </li>
+                                                <li class="list-inline-item ms-2">
+                                                    <label class="m-0"><a href="#"><i
+                                                                class="fa fa-comment"></i></a>  Comment</label><span
+                                                        class="ms-2 counter">569</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="col-md-12 mb-3">
-                                    <strong>Phone: </strong>
-                                    <span>{{ auth()->guard('user')->user()->phone ?? 'empty'}} </span>
+                            </div>
+                            <!-- user profile second-style end-->
+                            <!-- user profile third-style start-->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="profile-img-style">
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="media"><img class="img-thumbnail rounded-circle me-3"
+                                                        src="/Backend/assets/images/user/7.jpg"
+                                                        alt="Generic placeholder image">
+                                                    <div class="media-body align-self-center">
+                                                        <h5 class="mt-0 user-name">{{ Auth()->guard('user')->user()->name }}
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 align-self-center">
+                                                <div class="float-sm-end"><small>10 Hours ago</small></div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <p>you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
+                                            anything
+                                            embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the
+                                            Internet
+                                            tend to repeat predefined chunks as necessary, making this the first true
+                                            generator
+                                            on the
+                                            Internet.</p>
+                                        <div class="row mt-4 pictures my-gallery" id="aniimated-thumbnials-2" itemscope="">
+                                            <figure class="col-sm-6" itemprop="associatedMedia" itemscope=""><a
+                                                    href="/Backend/assets/images/other-images/profile-style-img3.png"
+                                                    itemprop="contentUrl" data-size="1600x950"><img
+                                                        class="img-fluid rounded"
+                                                        src="/Backend/assets/images/other-images/profile-style-img.png"
+                                                        itemprop="thumbnail" alt="gallery"></a>
+                                                <figcaption itemprop="caption description">Image caption 1</figcaption>
+                                            </figure>
+                                            <figure class="col-sm-6" itemprop="associatedMedia" itemscope=""><a
+                                                    href="/Backend/assets/images/other-images/profile-style-img3.png"
+                                                    itemprop="contentUrl" data-size="1600x950"><img
+                                                        class="img-fluid rounded"
+                                                        src="/Backend/assets/images/other-images/profile-style-img.png"
+                                                        itemprop="thumbnail" alt="gallery"></a>
+                                                <figcaption itemprop="caption description">Image caption 2</figcaption>
+                                            </figure>
+                                        </div>
+                                        <div class="like-comment">
+                                            <ul class="list-inline">
+                                                <li class="list-inline-item border-right pe-3">
+                                                    <label class="m-0"><a href="#"><i
+                                                                class="fa fa-heart"></i></a>  Like</label><span
+                                                        class="ms-2 counter">2659</span>
+                                                </li>
+                                                <li class="list-inline-item ms-2">
+                                                    <label class="m-0"><a href="#"><i
+                                                                class="fa fa-comment"></i></a>  Comment</label><span
+                                                        class="ms-2 counter">569</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="col-md-12 mb-3 ">
-                                    <strong>Country: </strong>
-                                    <span>{{ auth()->guard('user')->user()->country ?? 'empty' }}</span>
+                            </div>
+                            <!-- user profile third-style end-->
+                            <!-- user profile fourth-style start-->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="profile-img-style">
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="media"><img class="img-thumbnail rounded-circle me-3"
+                                                        src="/Backend/assets/images/user/7.jpg"
+                                                        alt="Generic placeholder image">
+                                                    <div class="media-body align-self-center">
+                                                        <h5 class="mt-0 user-name">{{ Auth()->guard('user')->user()->name }}
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 align-self-center">
+                                                <div class="float-sm-end"><small>10 Hours ago</small></div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots
+                                            in a
+                                            piece of
+                                            classical Latin literature from 45 BC, making it over 2000 years old. Richard
+                                            McClintock, a
+                                            Latin professor at Hampden-Sydney College in Virginia, looked up one of the more
+                                            obscure
+                                            Latin words, consectetur, from a Lorem Ipsum passage, and going through the
+                                            cites of
+                                            the
+                                            word in classical literature, discovered the undoubtable source .Contrary to
+                                            popular
+                                            belief,
+                                            Lorem Ipsum is not simply random text. It has roots in a piece of classical
+                                            Latin
+                                            literature
+                                            from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor
+                                            at
+                                            Hampden-Sydney College in Virginia, looked up one of the more obscure Latin
+                                            words,
+                                            consectetur, from a Lorem Ipsum passage, and going through the cites of the word
+                                            in
+                                            classical literature, discovered the undoubtable source</p>
+                                        <div class="like-comment mt-4">
+                                            <ul class="list-inline">
+                                                <li class="list-inline-item border-right pe-3">
+                                                    <label class="m-0"><a href="#"><i
+                                                                class="fa fa-heart"></i></a>  Like</label><span
+                                                        class="ms-2 counter">2659</span>
+                                                </li>
+                                                <li class="list-inline-item ms-2">
+                                                    <label class="m-0"><a href="#"><i
+                                                                class="fa fa-comment"></i></a>  Comment</label><span
+                                                        class="ms-2 counter">569</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="col-md-12 text-center py-4">
-                                    <button class="btn btn-dark btn-block btn-login" type="submit" data-toggle="modal"
-                                        data-target="#editProfileModal">Update</button>
+                            </div>
+                            <!-- user profile fourth-style end-->
+                            <!-- user profile fifth-style start-->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="profile-img-style">
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="media"><img class="img-thumbnail rounded-circle me-3"
+                                                        src="/Backend/assets/images/user/7.jpg"
+                                                        alt="Generic placeholder image">
+                                                    <div class="media-body align-self-center">
+                                                        <h5 class="mt-0 user-name">{{ Auth()->guard('user')->user()->name }}
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 align-self-center">
+                                                <div class="float-sm-end"><small>10 Hours ago</small></div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-xl-4">
+                                                <div class="my-gallery" id="aniimated-thumbnials-3" itemscope="">
+                                                    <figure itemprop="associatedMedia" itemscope=""><a
+                                                            href="/Backend/assets/images/blog/img.png" itemprop="contentUrl"
+                                                            data-size="1600x950"><img class="img-fluid rounded"
+                                                                src="/Backend/assets/images/blog/img.png"
+                                                                itemprop="thumbnail" alt="gallery"></a>
+                                                        <figcaption itemprop="caption description">Image caption 1
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                                <div class="like-comment mt-4 like-comment-sm-mb">
+                                                    <ul class="list-inline">
+                                                        <li class="list-inline-item border-right pe-3">
+                                                            <label class="m-0"><a href="#"><i
+                                                                        class="fa fa-heart"></i></a>  Like</label><span
+                                                                class="ms-2 counter">2659</span>
+                                                        </li>
+                                                        <li class="list-inline-item ms-2">
+                                                            <label class="m-0"><a href="#"><i
+                                                                        class="fa fa-comment"></i></a>  Comment</label><span
+                                                                class="ms-2 counter">569</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has
+                                                    roots in a
+                                                    piece of classical Latin literature from 45 BC, making it over 2000
+                                                    years
+                                                    old.
+                                                    Richard McClintock, a Latin professor at Hampden-Sydney College in
+                                                    Virginia,
+                                                    looked
+                                                    up one of the more obscure Latin words, consecteturContrary to popular
+                                                    belief, Lorem
+                                                    Ipsum is not simply random text. It has roots in a piece of classical
+                                                    Latin
+                                                    literature from 45 BC, making it over 2000 years old. Richard
+                                                    McClintock, a
+                                                    Latin
+                                                    professor at Hampden-Sydney College in Virginia, looked up one of the
+                                                    more
+                                                    obscure
+                                                    Latin words, consectetur</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="col-md-12 text-center mt-2">
-                                    <a class="btn btn-dark btn-block btn-login" href="{{ route('home') }}">Back to
-                                        home</a>
+                            </div>
+                            <!-- user profile fifth-style end-->
+                            <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="pswp__bg"></div>
+                                <div class="pswp__scroll-wrap">
+                                    <div class="pswp__container">
+                                        <div class="pswp__item"></div>
+                                        <div class="pswp__item"></div>
+                                        <div class="pswp__item"></div>
+                                    </div>
+                                    <div class="pswp__ui pswp__ui--hidden">
+                                        <div class="pswp__top-bar">
+                                            <div class="pswp__counter"></div>
+                                            <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                                            <button class="pswp__button pswp__button--share" title="Share"></button>
+                                            <button class="pswp__button pswp__button--fs"
+                                                title="Toggle fullscreen"></button>
+                                            <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                                            <div class="pswp__preloader">
+                                                <div class="pswp__preloader__icn">
+                                                    <div class="pswp__preloader__cut">
+                                                        <div class="pswp__preloader__donut"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                                            <div class="pswp__share-tooltip"></div>
+                                        </div>
+                                        <button class="pswp__button pswp__button--arrow--left"
+                                            title="Previous (arrow left)"></button>
+                                        <button class="pswp__button pswp__button--arrow--right"
+                                            title="Next (arrow right)"></button>
+                                        <div class="pswp__caption">
+                                            <div class="pswp__caption__center"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <!--end tab infomation -->
-
-                <!--tab password-->
-                    <div class="tab-pane fade {{ request('tab') === 'password' ? 'show active' : '' }}" id="password">
-                        <div class="bg-light p-30 mb-5 col-lg-6 offset-lg-3 rounded ">
-                            <h4 class="text-center mb-3">Change Password</h4>
-                            <form action="{{ route('userPassword.update') }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="form-group position-relative">
-                                    <label> Current password</label>
-                                    <input type="password" class="form-control @error('current_password') is-invalid @enderror"
-                                        name="current_password" required placeholder="Enter Current Password" id="current_password"
-                                        value="{{ old('current_password') }}">
-                                    <span class="toggle-password" data-target="#current_password">
-                                        <i class="fa fa-eye"></i>
-                                    </span>
-
-                                    @error('current_password')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group position-relative">
-                                    <label> New password</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                        name="password" required placeholder="Enter new Password" id="password1"
-                                        value="{{ old('password') }}">
-                                    <span class="toggle-password"  data-target="#password1">
-                                        <i class="fa fa-eye"></i>
-                                    </span>
-
-                                    @error('password')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group position-relative">
-                                    <label> Re-enter new password</label>
-                                    <input type="password"
-                                        class="form-control @error('password_confirmation') is-invalid @enderror"
-                                        name="password_confirmation" required placeholder="Re-enter new Password"
-                                        value="{{ old('password_confirmation') }}" id="password_confirmation">
-                                    <span class="toggle-password" data-target="#password_confirmation">
-                                        <i class="fa fa-eye"></i>
-                                    </span>
-                                    @error('password_confirmation')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-12 text-center py-4">
-                                    <button class="btn btn-dark btn-block btn-login" type="submit">Update</button>
-                                </div>
-
-                                <div class="col-md-12 text-center mt-2">
-                                    <a class="btn btn-dark btn-block btn-login" href="{{ route('home') }}">Back to
-                                        home</a>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
                 </div>
-                <!-- end tab password -->
+                <!-- Container-fluid Ends-->
             </div>
         </div>
     </div>
-
-    <!-- Modal edit profile -->
-    <div class="modal fade" id="editProfileModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit Profile</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('userInfo.update') }}" method="POST">
-                        @csrf
-                        @method('PUT')
-
-                        <div class="form-group mb-3">
-                            <label for="">Username</label>
-                            <input type="text" name="name" class="form-control"
-                                value="{{ auth()->guard('user')->user()->name }}" required disabled>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label >Email</label>
-                            <input type="email" name="email" class="form-control"
-                                value="{{ auth()->guard('user')->user()->email }}" required disabled>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label >Phone</label>
-                            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
-                                value="{{ auth()->guard('user')->user()->phone }}">
-
-                            @error('phone')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-
-                        </div>
-                        <div class="form-group mb-3">
-                            <label >Country</label>
-                            <input type="text" name="country" class="form-control @error('country') is-invalid @enderror"
-                                value="{{ auth()->guard('user')->user()->country }}">
-
-                            @error('country')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-md-12 text-center py-4">
-                            <button class="btn btn-dark btn-block btn-login" type="submit">Update</button>
-                        </div>
-                        <div class="col-md-12 text-center mt-2">
-                            <a class="btn btn-dark btn-block btn-login" href="{{ route('userProfile') }}">Back</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Modal edit profile -->
-    </div>
-
-    <!-- Profile End -->
-
 @endsection

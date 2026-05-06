@@ -13,8 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias(['auth.customer' => AuthCustomerMiddleware::class,
-                            'auth.user' => AuthUserMiddleware::class]);
+        $middleware->alias([
+        'auth.user' => AuthUserMiddleware::class,
+        'auth.customer' => AuthCustomerMiddleware::class],);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -15,7 +15,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
@@ -25,6 +24,5 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href={{ asset('frontend/css/style.css') }} rel="stylesheet">
     <link href={{ asset('frontend/css/mycss.css') }} rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('frontend/scss/my.scss') }}">
 </head>
 </html>

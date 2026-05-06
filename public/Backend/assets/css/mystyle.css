@@ -1,0 +1,5 @@
+/* invalid space */
+was-validated .form-control:invalid, .form-control.is-invalid
+{
+    background-position: right 50px center;
+}

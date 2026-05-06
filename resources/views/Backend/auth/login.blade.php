@@ -1,77 +1,70 @@
-@extends('frontend.layout')
-@section('main_contain')
+@extends('Backend.layout-light')
+@section('admin_contain')
 
-    <body>
-        <!-- Breadcrumb Start -->
+    <form action="{{ route('userLogin.post') }}" method="post">
+        @csrf
         <div class="container-fluid">
-            <div class="row px-xl-5">
-                <div class="col-12">
-                    <nav class="breadcrumb bg-light mb-30">
-                        <a class="breadcrumb-item text-dark" href="/">Home</a>
-                        <span class="breadcrumb-item active">Login</span>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <!-- Breadcrumb End -->
+            <div class="row">
+                <div class="col-12 p-0">
+                    <div class="login-card">
+                        <div class="login-main">
+                            <form class="theme-form">
+                                <h4>Sign in to account</h4>
+                                <p>Enter your email & password to login</p>
+                                @if (session()->has('error'))
+                                    <div class="text-danger py-2">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
+                                <div class="form-group">
+                                    <label class="col-form-label">Email Address</label>
+                                    <input class="form-control @error('username') is-invalid @enderror" type="email"
+                                        required="" placeholder="Test@gmail.com" value="{{ old('username') }}" name="username">
 
-        <!-- Login Start -->
-        <form action="{{ route('userLogin.post') }}" method="post">
-            @csrf
-            <div class="container-fluid">
-                <div class="row px-xl-5">
-                    <div class="col-lg-12">
-                        @if (session()->has('error'))
-                            <div class="text-danger py-2"  >
-                                {{ session('error') }}
-                            </div>
-                        @endif
-
-                        <h5 class="section-title position-relative text-uppercase mb-5 text-center">
-                            <span class="bg-secondary pr-3">Login</span>
-                        </h5>
-                        <div class="bg-light p-30 mb-5 col-lg-6 offset-lg-3">
-                            <div class="row">
-                                <div class="col-md-12 form-group py-3">
-                                    <input class="form-control @error('username') is-invalid @enderror"
-                                        style="border-radius:15px" type="text"
-                                        placeholder="ID/Username" name="username" value="{{ old('username') }}">
                                     @error('username')
                                         <div class="text-danger">{{$message}}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-12 form-group  ">
-                                    <input class="form-control @error('password') is-invalid @enderror "
-                                        style="border-radius:15px" type="password"
-                                        placeholder="Password" name="password" value="{{ old('password') }}" id="password">
-                                    <span class="toggle-password login" data-target="#password">
-                                        <i class="fa fa-eye"></i>
-                                    </span>
+                                <div class="form-group">
+                                    <label class="col-form-label">Password</label>
+                                    <div class="form-input position-relative">
+                                        <input class="form-control @error('password') is-invalid @enderror"
+                                        type="password" name="password" required id="password"
+                                        placeholder="*********">
+                                        <div class="show-hide" data-target="#password"><span class="show"> </span></div>
+                                    </div>
                                     @error('password')
-                                        <div class="text-danger">{{$message}}</div>
+                                    <div class="text-danger">{{$message}}</div>
                                     @enderror
                                 </div>
-                               <div class="form-check ml-3">
-                                 <label class="form-check-label">
-                                   <input type="checkbox" class="form-check-input" name="remember" id="remember" value="1" >
-                                   Remember me
-                                 </label>
-                               </div>
-                                <div class="col-md-12 form-group text-center py-5">
-                                    <button class="btn btn-dark btn-block btn-login" type="submit">Login</button>
+                                <div class="form-group mb-0">
+                                    <div class="checkbox p-0">
+                                        <input id="checkbox1" type="checkbox">
+                                        <label class="text-muted" for="checkbox1">Remember password</label>
+                                    </div><a class="link" href="forget-password-2.html">Forgot password?</a>
+                                    <div class="text-end mt-3">
+                                        <button class="btn btn-primary btn-block w-100" type="submit">Sign in</button>
+                                    </div>
                                 </div>
-                                <div class="col-md-12 form-group text-center ">
-                                    <a class="btn btn-light btn-block btn-login" href="#">Forgot Password?</a>
+                                <h6 class="text-muted mt-4 or">Or Sign in with</h6>
+                                <div class="social mt-4">
+                                    <div class="btn-showcase"><a class="btn btn-light" href="https://www.linkedin.com/login"
+                                            target="_blank"><i class="txt-linkedin" data-feather="linkedin"></i> LinkedIn
+                                        </a><a class="btn btn-light" href="https://twitter.com/login?lang=en"
+                                            target="_blank"><i class="txt-twitter" data-feather="twitter"></i>twitter</a><a
+                                            class="btn btn-light" href="https://www.facebook.com/" target="_blank"><i
+                                                class="txt-fb" data-feather="facebook"></i>facebook</a></div>
                                 </div>
-                                <div class="col-md-12 form-group text-center">
-                                    <a class="btn btn-dark btn-block btn-login" href="{{ '/user/register' }}">Register</a>
-                                </div>
-                            </div>
+                                <p class="mt-4 mb-0 text-center">Don't have account?<a class="ms-2"
+                                        href="sign-up-2.html">Create
+                                        Account</a></p>
+                            </form>
                         </div>
+
                     </div>
                 </div>
             </div>
-        </form>
-        <!-- Login End -->
-    </body>
+        </div>
+    </form>
+
 @endsection

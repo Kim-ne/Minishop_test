@@ -18,12 +18,22 @@ class HomeService implements HomeServiceInterface
     {
         return Product::getList();
     }
-     public function getListProductRecent(): LengthAwarePaginator
+    public function getListProductRecent(): LengthAwarePaginator
     {
         return Product::getListRecent();
     }
-      public function getListCategory(): Collection
+    public function getListCategory(): Collection
     {
         return Category::getList();
+    }
+
+    public function homeDashboard(): bool
+    {
+        return true;
+    }
+
+    public function socialIndex(): bool
+    {
+        return true;
     }
 }

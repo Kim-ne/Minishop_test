@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\AuthController as BackendAuthController;
+use App\Http\Controllers\Backend\HomeController as BackendHomeController;
 use App\Http\Controllers\Backend\ProfileController as BackendProfileController;
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\HomeController;
@@ -36,9 +37,13 @@ Route::middleware(['auth.customer'])->group(function () {
 
 //middleware for auth-user
 Route::prefix('user')->middleware(['auth.user'])->group(function () {
+    Route::get('/', [BackendHomeController::class,'dashboardIndex'])->name('user.dashboard');
+    Route::get('/social', [BackendHomeController::class,'socialIndex'])->name('social');
     Route::get('/profile', [BackendProfileController::class,'userProfile'])->name('userProfile');
-    Route::put('/profile/info', [BackendProfileController::class,'userInfoUpdate'])->name('userInfo.update');
-    Route::put('/profile/password', [BackendProfileController::class,'userPasswordUpdate'])->name('userPassword.update');
+    Route::get('/edit-profile', [BackendProfileController::class,'editProfile'])->name('editProfile');
+    Route::put('/edit-profile/avatar', [BackendProfileController::class,'userAvatarUpdate'])->name('userAvatar.update');
+    Route::put('/edit-profile/info', [BackendProfileController::class,'userInfoUpdate'])->name('userInfo.update');
+    Route::put('/edit-profile/password', [BackendProfileController::class,'userPasswordUpdate'])->name('userPassword.update');
     Route::get('/logout', [BackendAuthController::class,'userLogout'])->name('user.logout');
 
 });
@@ -49,15 +54,21 @@ Route::post('/user/login', [BackendAuthController::class,'userLoginPost'])->name
 Route::get('/user/register', [BackendAuthController::class,'userRegister'])->name('userRegister');
 Route::post('/user/register', [BackendAuthController::class,'userRegisterPost'])->name('userRegister.post');
 
-//route for login
+//route customer for login
 Route::get('/login', [FrontendAuthController::class,'login'])->name('login');
 Route::post('/login', [FrontendAuthController::class,'loginPost'])->name('login.post');
 Route::get('/register', [FrontendAuthController::class,'register'])->name('register');
 Route::post('/register', [FrontendAuthController::class,'registerPost'])->name('register.post');
 
+//test
+Route::get('/logintest',[BackendHomeController::class,'loginTest'])->name('logintest');
+Route::get('/profiletest',[BackendHomeController::class,'profileTest'])->name('profiletest');
+// Route::get('/editProfiletest',[BackendHomeController::class,'editProfileTest'])->name('editProfiletest');
 
 //search route
 Route::get('/search', [ProductController::class,'search'])->name('search');
 
 //route for product detail page
 Route::get('/{alias}', [ProductController::class,'detail'])->name('product.detail');
+
+

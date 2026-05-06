@@ -44,6 +44,7 @@ class ProfileController extends Controller
     {
         try
         {
+            dd('123');
             $this->profileService->passwordUpdate($request);
 
             return redirect()->route('profile',['tab' => 'password'])->with('success', 'Password updated successfully');

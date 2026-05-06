@@ -9,6 +9,19 @@ use Illuminate\Notifications\Notifiable;
 class Customer extends Authenticatable
 {
     use HasFactory, Notifiable;
+
+    /**
+     * Summary of table
+     *
+     * @var string
+     */
+    protected $table = 'customers';
+
+    /**
+     * Summary of fillable
+     *
+     * @var array
+     */
     protected $fillable = [
         'firstname',
         'lastname',
@@ -30,9 +43,12 @@ class Customer extends Authenticatable
         'ship_city',
         'ship_zipcode',
     ];
+
     protected $hidden = [
         'password',
-        'remember_token'];
+        'remember_token'
+    ];
+
     protected function casts(): array
     {
         return [
@@ -40,16 +56,18 @@ class Customer extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    function orders()
+
+    public function orders()
     {
         return $this->hasMany(Order::class);
     }
-    function getFullNameAttribute()
+
+    public  function getFullNameAttribute()
     {
         return $this->firstname . ' ' . $this->lastname;
     }
 
-    static function emailExists(string $email):bool
+    public static function emailExists(string $email):bool
     {
         return self::where('email', $email)->exists();
     }
