@@ -54,7 +54,6 @@
                         <ul class="sidebar-submenu">
                             <li><a href="{{ route('userProfile') }}">Infomation</a></li>
                             <li><a href="{{ route('editProfile') }}">Edit</a></li>
-                            <li><a href="{{ asset('userCards') }}">Cards</a></li>
                         </ul>
                     </li>
 
@@ -86,10 +85,12 @@
                                 <use href="/Backend/assets/svg/icon-sprite.svg#fill-user"></use>
                             </svg><span>Customers</span></a>
                         <ul class="sidebar-submenu">
-                            <li><a href="user-profile.html">Customers Profile</a></li>
-                            <li><a href="edit-profile.html">Customers Edit</a></li>
-                            <li><a href="user-cards.html">Users Cards</a></li>
-                            <li><a href="user-list.html">Role</a></li>
+                            <li><a href="{{ route('customer.index') }}">Customers List</a></li>
+                            @if (auth()->guard('user')->user()->role == 'manager')
+                                <li><a href="{{ route('roles.index') }}">Role</a></li>
+
+                            @endif
+
                         </ul>
                     </li>
 

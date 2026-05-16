@@ -23,7 +23,8 @@
                                 <div class="card hovercard text-center">
                                     <div class="cardheader"></div>
                                     <div class="user-image">
-                                        <div class="avatar"><img alt="" src="/Backend/assets/images/user/7.jpg"></div>
+                                        <div class="avatar"><img alt="" src="{{ $user->avatar ? asset('storage/avatars/' . $user->avatar)
+                                                                                             : asset('Backend/assets/images/user/default-avatar.png') }}"></div>
                                         <div class="icon-wrapper"><a href="{{ route('editProfile') }}"><i class="icofont icofont-pencil-alt-5"></i></a></div>
                                     </div>
                                     <div class="info">
@@ -33,7 +34,7 @@
                                                     <div class="col-md-6">
                                                         <div class="ttl-info text-start">
                                                             <h6><i class="fa fa-envelope"></i>   Email</h6>
-                                                            <span>{{ Auth()->guard('user')->user()->email ?? 'empty'  }}</span>
+                                                            <span>{{ $user->email ?? 'empty' }}</span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -47,8 +48,8 @@
                                             <div class="col-sm-12 col-lg-4 order-sm-0 order-xl-1">
                                                 <div class="user-designation">
                                                     <div class="title"><a
-                                                            href="#">{{ Auth()->guard('user')->user()->name }}</a></div>
-                                                    <div class="desc">Role</div>
+                                                            href="#">{{ $user->name }}</a></div>
+                                                    <div class="desc">{{ $user->role }}</div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-lg-4 order-sm-2 order-xl-2">
@@ -56,13 +57,13 @@
                                                     <div class="col-md-6">
                                                         <div class="ttl-info text-start">
                                                             <h6><i class="fa fa-phone"></i>   Contact Us</h6>
-                                                            <span> {{ Auth()->guard('user')->user()->phone }}</span>
+                                                            <span> {{ $user->phone }}</span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="ttl-info text-start">
                                                             <h6><i class="fa fa-location-arrow"></i>   Location</h6>
-                                                            <span>{{ Auth()->guard('user')->user()->country }}</span>
+                                                            <span>{{ $user->country }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -110,8 +111,7 @@
                                                         src="/Backend/assets/images/user/7.jpg"
                                                         alt="Generic placeholder image">
                                                     <div class="media-body align-self-center">
-                                                        <h5 class="mt-0 user-name">{{ Auth()->guard('user')->user()->name }}
-                                                        </h5>
+                                                        <h5 class="mt-0 user-name">{{ $user->name }}</h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -168,7 +168,7 @@
                                                         src="/Backend/assets/images/user/7.jpg"
                                                         alt="Generic placeholder image">
                                                     <div class="media-body align-self-center">
-                                                        <h5 class="mt-0 user-name">{{ Auth()->guard('user')->user()->name }}
+                                                        <h5 class="mt-0 user-name">{{ $user->name }}
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -232,7 +232,7 @@
                                                         src="/Backend/assets/images/user/7.jpg"
                                                         alt="Generic placeholder image">
                                                     <div class="media-body align-self-center">
-                                                        <h5 class="mt-0 user-name">{{ Auth()->guard('user')->user()->name }}
+                                                        <h5 class="mt-0 user-name">{{ $user->name }}
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -293,7 +293,7 @@
                                                         src="/Backend/assets/images/user/7.jpg"
                                                         alt="Generic placeholder image">
                                                     <div class="media-body align-self-center">
-                                                        <h5 class="mt-0 user-name">{{ Auth()->guard('user')->user()->name }}
+                                                        <h5 class="mt-0 user-name">{{ $user->name }}
                                                         </h5>
                                                     </div>
                                                 </div>

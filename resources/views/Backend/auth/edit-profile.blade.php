@@ -37,7 +37,7 @@
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}"><svg
                                                 class="stroke-icon">
-                                                <use href="Backend/assets/svg/icon-sprite.svg#stroke-home"></use>
+                                                <use href="/Backend/assets/svg/icon-sprite.svg#stroke-home"></use>
                                             </svg></a></li>
                                     <li class="breadcrumb-item">Home</li>
                                     <li class="breadcrumb-item active">Edit-profile</li>
@@ -64,7 +64,7 @@
                                         <div class="row mb-2">
                                             <div class="profile-title">
                                                 <div class="media"><a type="button" data-bs-toggle="modal"
-                                                        data-bs-target="#changeAvatar"><img class="img-70 rounded-circle"
+                                                        data-bs-target="#changeAvatar"><img class="img-90 b-r-10"
                                                             alt="avatar" src="{{ asset('storage/avatars/' . Auth()->guard('user')->user()->avatar) }}"></a>
                                                     <div class="media-body">
                                                         <h5 class="mb-1">{{ Auth()->guard('user')->user()->name }}</h5>

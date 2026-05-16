@@ -4,15 +4,30 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Ramsey\Collection\Collection;
 
 class Product extends Model
 {
-    use HasFactory,Notifiable;
+    use HasFactory;
 
     const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 0;
+    const FEATURED_YES = 1;
+    const FEATURED_NO = 0;
+
+    protected $fillable = [
+        'name',
+        'price',
+        'qty',
+        'image',
+        'alias',
+        'category_id',
+        'status',
+        'sku',
+        'keywords',
+        'supplier_id',
+        'description',
+    ];
 
     function category()
     {
@@ -26,17 +41,17 @@ class Product extends Model
      * Get list of products with pagination.
      * @return LengthAwarePaginator
      */
-    static function getList(): LengthAwarePaginator
+    public static function getList(): LengthAwarePaginator
     {
         return self::with('category')->orderBy('price', 'desc')
                                                 ->where('status', 1)->paginate(8);
     }
-    static function getListProductPage(): LengthAwarePaginator
+    public static function getListProductPage(): LengthAwarePaginator
     {
         return self::with('category')->orderBy('price', 'desc')
                                                 ->where('status', 1)->paginate(9);
     }
-    static function getListRecent(): LengthAwarePaginator
+    public static function getListRecent(): LengthAwarePaginator
     {
         return self::with('category')->orderBy('created_at', 'desc')
                                                 ->where('status', 1)->paginate(8);
@@ -49,7 +64,7 @@ class Product extends Model
      * @return mixed
      */
 
-    static function detail($alias)
+    public static function detail($alias)
     {
         $productDetail = self::where(['status'=>1, 'alias'=>$alias])->first();
         return $productDetail;
@@ -60,7 +75,7 @@ class Product extends Model
      * @param mixed $product
      * @return mixed
      */
-    static function getRelatedProduct($product)
+    public static function getRelatedProduct($product)
     {
         return self::where('category_id', $product->category_id)
                     ->where('id', '!=', $product->id)->take(4)->get();
@@ -71,7 +86,7 @@ class Product extends Model
      * @param LengthAwarePaginator $keyword
      * @return LengthAwarePaginator
      */
-    static function search($keyword)
+    public static function search($keyword)
     {
         return self::where('name', 'like', "%$keyword%")
                     ->orWhere('description', 'like', "%$keyword%")

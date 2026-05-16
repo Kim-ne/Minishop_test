@@ -71,4 +71,28 @@ class Customer extends Authenticatable
     {
         return self::where('email', $email)->exists();
     }
+
+    /**
+     * Customer status
+     */
+
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 0;
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function isInactive(): bool
+    {
+        return $this->status === self::STATUS_INACTIVE;
+    }
+
+    public function scopeForStatus($query)
+    {
+        return $query->select('id', 'firstname', 'lastname', 'email', 'phone','created_at', 'status')
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+    }
 }

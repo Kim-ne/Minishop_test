@@ -207,7 +207,7 @@
                     <div class="media profile-media"><img class="b-r-10"
                             src="/Backend/assets/images/dashboard/profile.png" alt="">
                         <div class="media-body"><span>{{ Auth()->guard('user')->user()->name }}</span>
-                            <p class="mb-0 font-roboto">Admin <i class="middle fa fa-angle-down"></i></p>
+                            <p class="mb-0 font-roboto">{{ ucfirst(Auth()->guard('user')->user()->role) }}<i class="middle fa fa-angle-down"></i></p>
                         </div>
                     </div>
                     <ul class="profile-dropdown onhover-show-div">

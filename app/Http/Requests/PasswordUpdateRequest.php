@@ -37,23 +37,6 @@ class PasswordUpdateRequest extends FormRequest
             'password_confirmation' => 'required|same:password',
         ];
     }
-    // protected function failedValidation(Validator $validator)
-    // {
-    //     if(request()->is('profile/password'))
-    //     {
-    //         $redirectRoute = 'profile';
-    //         $redirectParams = ['tab' => 'password'];
-    //     } else {
-    //         $redirectRoute = 'userProfile';
-    //         $redirectParams = ['tab' => 'password'];
-    //     }
-
-    //     throw new HttpResponseException(
-    //         redirect()
-    //             ->route($redirectRoute, $redirectParams)
-    //             ->withErrors($validator)
-    //             ->withInput()
-    //     );
-    // }
+    
 
 }

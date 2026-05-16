@@ -24,7 +24,7 @@ class ProductService implements ProductServiceInterface
     {
         return Category::getList();
     }
-    
+
     public function detail($alias): mixed
     {
         $product = Product::detail($alias);

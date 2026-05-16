@@ -33,11 +33,11 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'city',
-        'Postal_code',
-        'city',
+        'postal_code',
         'about_me',
         'password',
         'avatar',
+        'role'
     ];
 
     /**
@@ -63,33 +63,41 @@ class User extends Authenticatable
         ];
     }
 
-    static function nameExists(string $name):bool
+    static function nameExists(string $name): bool
     {
         return self::where('name', $name)->exists();
     }
 
-    static function emailExists(string $email):bool
+    static function emailExists(string $email): bool
     {
         return self::where('email', $email)->exists();
     }
 
-    // function getCountryAttribute(): ?string
-    // {
-    //     switch ($this->attributes['country']) {
-    //         case 1:
-    //             return 'Germany';
-    //             break;
-    //         case 2:
-    //             return 'Canada';
-    //             break;
-    //         case 3:
-    //             return 'Usa';
-    //             break;
-    //         case 4:
-    //             return 'Aus';
-    //             break;
-    //         default:
-    //             return null;
-    //     }
-    // }
+    /**
+     * Summary of Role constants
+     */
+    const ROLE_MANAGER = 'manager';
+    const ROLE_STAFF = 'staff';
+
+    public function isManager():bool
+    {
+        return  $this->role === self::ROLE_MANAGER;
+    }
+
+    public function isStaff():bool
+    {
+        return  $this->role === self::ROLE_STAFF;
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
+    public static function scopeForRoleManagement($query)
+    {
+        return $query->select('id','name','email','role','created_at')
+                    ->orderBy('created_at','desc')
+                    ->get();
+    }
 }

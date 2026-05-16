@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginPostRequest;
-use App\Models\Category;
 use App\Services\AuthServiceInterface;
 use App\Http\Requests\RegisterRequest;
-use App\Models\Product;
-use App\Services\ProductService;
 use App\Services\ProductServiceInterface;
 use Illuminate\Support\Facades\Auth;
 

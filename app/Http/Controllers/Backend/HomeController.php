@@ -47,4 +47,9 @@ class HomeController extends Controller
     //     return view('Backend.auth.edit-profile');
     // }
 
+    function roleTest()
+    {
+        return view('Backend.auth.role');
+    }
+
 }

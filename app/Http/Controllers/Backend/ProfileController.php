@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InfoUpdateRequest;
-use App\Models\Category;
 use App\Http\Requests\PasswordUpdateRequest;
 use App\Services\ProfileServiceInterface;
 use App\Services\ProductServiceInterface;
@@ -29,10 +28,11 @@ class ProfileController extends Controller
     public function userProfile(): View
     {
 
-        $this->profileService->userProfile();
+        $user =  $this->profileService->userProfile();
         $categories = $this->productService->getListCategory();
 
         return view('Backend.auth.profile', [
+            'user' => $user,
             'categories' => $categories
         ]);
     }

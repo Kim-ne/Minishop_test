@@ -41,6 +41,18 @@ class AppServiceProvider extends ServiceProvider
             \App\Services\ProfileServiceInterface::class,
             \App\Services\ProfileService::class
         );
+
+        // RoleServiceInterface for user
+        $this->app->bind(
+            \App\Services\RoleServiceInterface::class,
+            \App\Services\RoleService::class
+        );
+
+        // CustomerServiceInterface for user
+        $this->app->bind(
+            \App\Services\CustomerServiceInterface::class,
+            \App\Services\CustomerService::class
+        );
     }
 
     /**

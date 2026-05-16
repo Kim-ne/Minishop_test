@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Ramsey\Collection\Collection;
+
 
 class Order  extends Model
 {
@@ -30,7 +29,7 @@ class Order  extends Model
     function getStatusLabelAttribute(){
         switch  ($this->status) {
             case 1:
-                return 'Recieved';
+                return 'Received';
                 break;
             case 2:
                 return 'Shipping';
@@ -41,10 +40,8 @@ class Order  extends Model
             case 4:
                 return 'Cancelled';
                 break;
+            default:
+                return 'Received';
         }
     }
 }
-
-
-
-
