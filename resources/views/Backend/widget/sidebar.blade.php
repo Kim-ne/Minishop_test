@@ -71,9 +71,8 @@
                                 <use href="/Backend/assets/svg/icon-sprite.svg#fill-ecommerce"></use>
                             </svg><span>Ecommerce</span></a>
                         <ul class="sidebar-submenu">
-                            <li><a href="product.html">Product</a></li>
-                            <li><a href="product-page.html">Product page</a></li>
-                            <li><a href="list-products.html">Add Product</a></li>
+                            <li><a href="{{ route('user.products') }}">Product</a></li>
+                            <li><a href="{{ route('products.create') }}">Add Product</a></li>
                         </ul>
                     </li>
                     <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title"

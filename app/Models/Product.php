@@ -23,6 +23,7 @@ class Product extends Model
         'alias',
         'category_id',
         'status',
+        'featured',
         'sku',
         'keywords',
         'supplier_id',
@@ -43,7 +44,7 @@ class Product extends Model
      */
     public static function getList(): LengthAwarePaginator
     {
-        return self::with('category')->orderBy('price', 'desc')
+        return self::with('category')->orderBy('created_at', 'desc')
                                                 ->where('status', 1)->paginate(8);
     }
     public static function getListProductPage(): LengthAwarePaginator
@@ -96,6 +97,46 @@ class Product extends Model
     public static function getProductByStatusAndId(string|int $id)
     {
         return self::where(['status'=>self::STATUS_ACTIVE, 'id'=>$id])->first();
+    }
+
+    public function toggleStatus()
+    {
+        $this->status = $this->status == self::STATUS_ACTIVE
+                                        ? self::STATUS_INACTIVE
+                                        : self::STATUS_ACTIVE;
+
+        return $this->save();
+    }
+
+    public function toggleFeatured()
+    {
+        $this->featured = $this->featured == self::FEATURED_YES
+                                        ? self::FEATURED_NO
+                                        : self::FEATURED_YES;
+
+        return $this->save();
+    }
+
+    public static function aliasExists(string $alias, ?int $excludeId = null): bool
+    {
+
+        return self::where('alias', $alias)
+                ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
+                ->exists();
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status == self::STATUS_ACTIVE;
+    }
+
+    public function isFeatured(): bool
+    {
+        return $this->featured == self::FEATURED_YES;
+    }
+    public static function getAdminListProduct(): LengthAwarePaginator
+    {
+        return self::with('category')->orderBy('created_at', 'desc')->paginate(10);
     }
 
 }
