@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\HomeController as BackendHomeController;
 use App\Http\Controllers\Backend\ProfileController as BackendProfileController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\CustomerController as BackendCustomerController;
+use App\Http\Controllers\Backend\ProductController as BackendProductController;
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\ProductController;
@@ -39,6 +40,7 @@ Route::middleware(['auth.customer'])->group(function () {
 //middleware for auth-user
 Route::prefix('user')->middleware(['auth.user'])->group(function () {
     Route::middleware(['role:manager'])->group(function () {
+        // Route for role management
         Route::get('/roles',[RoleController::class,'index'])->name('roles.index');
         Route::post('/roles',[RoleController::class,'store'])->name('roles.store');
         Route::put('/roles/{user}/update',[RoleController::class,'update'])->name('roles.update');
@@ -46,15 +48,34 @@ Route::prefix('user')->middleware(['auth.user'])->group(function () {
         Route::patch('/customers/{customer}/toggle-status', [BackendCustomerController::class, 'toggleStatus'])->name('customer.toggleStatus');
         Route::delete('/customers/{customer}/delete', [BackendCustomerController::class, 'destroy'])->name('customer.destroy');
 
+        // Route for product management
+        Route::get('/products/create', [BackendProductController::class, 'create'])->name('products.create');
+        Route::post('/products', [BackendProductController::class, 'store'])->name('products.store');
+        Route::get('/products/{id}/edit', [BackendProductController::class, 'edit'])->name('products.edit');
+        Route::put('/products/{id}', [BackendProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{id}', [BackendProductController::class, 'destroy'])->name('products.destroy');
+        Route::patch('/products/{id}/toggle-status', [BackendProductController::class, 'toggleStatus'])->name('products.toggleStatus');
+        Route::patch('/products/{id}/toggle-featured', [BackendProductController::class, 'toggleFeatured'])->name('products.toggleFeatured');
+
     });
 
+    //route product for user
+    Route::patch('/products/{id}/stock', [BackendProductController::class, 'updateStock'])->name('products.updateStock');
+    Route::get('/products', [BackendProductController::class,'index'])->name('user.products');
+    Route::get('/products/{id}', [BackendProductController::class,'show'])->name('user.productShow');
+
+    //route for dashboard
     Route::get('/', [BackendHomeController::class,'dashboardIndex'])->name('user.dashboard');
     Route::get('/social', [BackendHomeController::class,'socialIndex'])->name('social');
     Route::get('/profile', [BackendProfileController::class,'userProfile'])->name('userProfile');
+
+    //route for profile
     Route::get('/edit-profile', [BackendProfileController::class,'editProfile'])->name('editProfile');
     Route::put('/edit-profile/avatar', [BackendProfileController::class,'userAvatarUpdate'])->name('userAvatar.update');
     Route::put('/edit-profile/info', [BackendProfileController::class,'userInfoUpdate'])->name('userInfo.update');
     Route::put('/edit-profile/password', [BackendProfileController::class,'userPasswordUpdate'])->name('userPassword.update');
+
+    //route for customer
     Route::get('/customers',[BackendCustomerController::class,'index'])->name('customer.index');
     Route::get('/customers/{customer}',[BackendCustomerController::class,'show'])->name('customer.show');
     Route::get('/logout', [BackendAuthController::class,'userLogout'])->name('user.logout');
