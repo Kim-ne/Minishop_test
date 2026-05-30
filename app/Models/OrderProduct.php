@@ -8,17 +8,21 @@ class OrderProduct extends Pivot
 {
     protected $table = 'order_product';
 
+    public $timestamps = true;
+
     protected $fillable = [
         'order_id',
-        'customer_id',
+        'product_id',
         'qty',
-        'price'
+        'price',
+        'status',
     ];
-    function product()
+
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }
-    function order()
+    public function order()
     {
         return $this->belongsTo(Order::class);
     }

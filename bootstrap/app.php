@@ -1,9 +1,10 @@
 <?php
 
-use App\Helpers\ApiResponse;
+use App\Helper\ApiResponse;
 use App\Http\Middleware\AuthCustomerMiddleware;
 use App\Http\Middleware\AuthUserMiddleware;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -59,5 +60,15 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
+        $exceptions->render(function (ModelNotFoundException $e, $request) {
+            if($request->expectsJson())
+            {
+                $model = class_basename($e->getModel());
+
+                return ApiResponse::notFound(" {$model} not found. ");
+            }
+        });
+
     })->create();
 
+{}

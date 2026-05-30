@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-use App\Http\Requests\UpdateUserRequest;
-use App\Http\Requests\StoreUserRequest;
+
 use App\Models\Customer;
-use App\Models\User;
+use App\Services\Contracts\CustomerServiceInterface;
 use Illuminate\Support\Collection;
-use Override;
+
 
 class CustomerService implements CustomerServiceInterface
 {

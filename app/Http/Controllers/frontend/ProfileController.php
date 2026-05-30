@@ -5,8 +5,8 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InfoUpdateRequest;
 use App\Models\Category;
-use App\Services\AuthServiceInterface;
-use App\Services\ProfileServiceInterface;
+use App\Services\Contracts\AuthServiceInterface;
+use App\Services\Contracts\ProfileServiceInterface;
 use App\Http\Requests\PasswordUpdateRequest;
 
 class ProfileController extends Controller
@@ -44,7 +44,6 @@ class ProfileController extends Controller
     {
         try
         {
-            dd('123');
             $this->profileService->passwordUpdate($request);
 
             return redirect()->route('profile',['tab' => 'password'])->with('success', 'Password updated successfully');

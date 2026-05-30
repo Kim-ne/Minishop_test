@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Http\Requests\InfoUpdateRequest;
 use App\Http\Requests\PasswordUpdateRequest;
 use App\Http\Requests\CustomerPasswordUpdateRequest;
+use App\Services\Contracts\ProfileServiceInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileService implements ProfileServiceInterface

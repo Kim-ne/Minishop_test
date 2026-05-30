@@ -4,10 +4,12 @@ namespace App\Services;
 
 use App\Http\Requests\LoginPostRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Services\Contracts\AuthServiceInterface;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+
 
 class AuthService implements AuthServiceInterface
 {
@@ -160,6 +162,19 @@ class AuthService implements AuthServiceInterface
             ]);
 
         return $user;
+    }
+
+    public function me(): mixed
+    {
+        if (Auth::guard('user')->check()) {
+            return Auth::guard('user')->user();
+        }
+
+        if (Auth::guard('buyer')->check()) {
+            return Auth::guard('buyer')->user();
+        }
+
+        return null;
     }
 }
 

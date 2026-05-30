@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Contracts;
 
 use App\Http\Requests\InfoUpdateRequest;
 use App\Http\Requests\PasswordUpdateRequest;

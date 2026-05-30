@@ -14,44 +14,68 @@ class AppServiceProvider extends ServiceProvider
     {
         // HomeServiceInterface
         $this->app->bind(
-            \App\Services\HomeServiceInterface::class,
+            \App\Services\Contracts\HomeServiceInterface::class,
             \App\Services\HomeService::class
         );
 
         // ProductServiceInterface
         $this->app->bind(
-            \App\Services\ProductServiceInterface::class,
+            \App\Services\Contracts\ProductServiceInterface::class,
             \App\Services\ProductService::class
         );
 
         // CartServiceInterface
         $this->app->bind(
-            \App\Services\CartServiceInterface::class,
+            \App\Services\Contracts\CartServiceInterface::class,
             \App\Services\CartService::class
         );
 
         // AuthServiceInterface
         $this->app->bind(
-            \App\Services\AuthServiceInterface::class,
+            \App\Services\Contracts\AuthServiceInterface::class,
             \App\Services\AuthService::class
         );
 
         // ProfileServiceInterface for Customer
         $this->app->bind(
-            \App\Services\ProfileServiceInterface::class,
+            \App\Services\Contracts\ProfileServiceInterface::class,
             \App\Services\ProfileService::class
         );
 
         // RoleServiceInterface for user
         $this->app->bind(
-            \App\Services\RoleServiceInterface::class,
+            \App\Services\Contracts\RoleServiceInterface::class,
             \App\Services\RoleService::class
         );
 
         // CustomerServiceInterface for user
         $this->app->bind(
-            \App\Services\CustomerServiceInterface::class,
+            \App\Services\Contracts\CustomerServiceInterface::class,
             \App\Services\CustomerService::class
+        );
+
+        // AuthApiServiceInterface
+        $this->app->bind(
+            \App\Services\Contracts\AuthApiServiceInterface::class,
+            \App\Services\AuthApiService::class
+        );
+
+        // ProductRepositoryInterface
+        $this->app->bind(
+            \App\Repositories\Contracts\ProductRepositoryInterface::class,
+            \App\Repositories\ProductRepository::class
+        );
+
+        // OrderRepositoryInterface
+        $this->app->bind(
+            \App\Repositories\Contracts\OrderRepositoryInterface::class,
+            \App\Repositories\OrderRepository::class
+        );
+
+        // OrderServiceInterface
+        $this->app->bind(
+            \App\Services\Contracts\OrderServiceInterface::class,
+            \App\Services\OrderService::class
         );
     }
 

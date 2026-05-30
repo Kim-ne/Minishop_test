@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginPostRequest;
-use App\Services\AuthServiceInterface;
+use App\Services\Contracts\AuthServiceInterface;
 use App\Http\Requests\RegisterRequest;
-use App\Services\ProductServiceInterface;
+use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller

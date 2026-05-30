@@ -5,8 +5,10 @@ namespace App\Services;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Requests\UpdateStockRequest;
+use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -14,15 +16,19 @@ use Illuminate\Support\Str;
 
 class ProductService implements ProductServiceInterface
 {
+    function __construct
+    (
+        protected ProductRepositoryInterface $productRepository
+    ) {}
     /**
      * Get paginated list of products for the product  index page.
      * @return LengthAwarePaginator
      * @return Collection
      * @return mixed
      */
-    public function getListProduct(): LengthAwarePaginator
+    public function getProductPaginate(): LengthAwarePaginator
     {
-        return Product::getListProductPage();
+        return Product::getProductPaginate();
     }
 
     public function getListCategory(): Collection
@@ -68,6 +74,16 @@ class ProductService implements ProductServiceInterface
     public function index(): LengthAwarePaginator
     {
         return Product::getAdminListProduct();
+    }
+
+    /**
+     * Summary of getAdminProductPaginate
+     * @param array $filters
+     * @return LengthAwarePaginator
+     */
+    public function getAdminProductPaginate(array $filters): LengthAwarePaginator
+    {
+        return $this->productRepository->getAdminProductPaginate($filters);
     }
 
     /**

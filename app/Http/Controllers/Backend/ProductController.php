@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Requests\UpdateStockRequest;
-use App\Services\ProductServiceInterface;
+use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 

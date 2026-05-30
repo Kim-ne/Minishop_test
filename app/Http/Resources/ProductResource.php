@@ -17,11 +17,11 @@ class ProductResource extends JsonResource
         return  [
             'id' => $this->id,
             'name' => $this->name,
-            'slug' => $this->slug,
+            'slug' => $this->alias,
             'description' => $this->description,
             'price' => $this->price,
             'price_formatted' => number_format($this->price, 0, ',', '.') . 'USD',
-            'stock' => $this->stock,
+            'qty' => $this->stock,
             'status' => $this->status,
             'is_featured' => $this->is_featured,
             'image' => $this->image ? asset('storage/' . $this->image) : null,

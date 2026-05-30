@@ -7,9 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderPostRequest;
 use App\Http\Requests\UpdateCartRequest;
 use App\Models\Category;
-use App\Services\ProductServiceInterface;
+use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\View\View;
-use App\Services\CartServiceInterface;
+use App\Services\contracts\CartServiceInterface;
 
 class CartController extends Controller
 {
@@ -43,7 +43,7 @@ class CartController extends Controller
         return redirect()->route('product.cart')->with('success', 'Product added to cart');
 
     }
-    
+
     function removeFromCart(string|int $id): mixed
     {
         $cart = $this->CartService->removeFromCart($id);

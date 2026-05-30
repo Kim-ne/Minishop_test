@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Contracts;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -14,7 +14,7 @@ interface ProductServiceInterface
      * Get Paginate with product and category
      * @return mixed
      */
-    public function getListProduct(): mixed;
+    public function getProductPaginate(): LengthAwarePaginator;
     public function getListCategory(): mixed;
     public function detail($alias): mixed;
     public function getRelatedProduct(Product $product): mixed;
@@ -30,6 +30,7 @@ interface ProductServiceInterface
 
 
     public function index(): LengthAwarePaginator;
+    public function getAdminProductPaginate(array $filters): LengthAwarePaginator;
     public function store(StoreProductRequest $request): Product;
     public function show(int $id): Product;
     public function update(int $id, UpdateProductRequest $request): Product;
@@ -37,5 +38,5 @@ interface ProductServiceInterface
     public function toggleStatus(int $id): Product;
     public function toggleFeatured(int $id): Product;
     public function updateStock(int $id, UpdateStockRequest $request): Product;
-    
+
 }

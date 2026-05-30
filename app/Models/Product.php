@@ -47,7 +47,7 @@ class Product extends Model
         return self::with('category')->orderBy('created_at', 'desc')
                                                 ->where('status', 1)->paginate(8);
     }
-    public static function getListProductPage(): LengthAwarePaginator
+    public static function getProductPaginate(): LengthAwarePaginator
     {
         return self::with('category')->orderBy('price', 'desc')
                                                 ->where('status', 1)->paginate(9);

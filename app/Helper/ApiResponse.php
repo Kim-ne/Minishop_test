@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Helper;
 
 use Illuminate\Http\JsonResponse;
 
@@ -34,15 +34,19 @@ class ApiResponse
     /**
      * return a standardized error response
      *
-     * @param  string      $message Message to return to client
-     * @param  int         $code    HTTP status code (default 400)
+     * @param  ?string     $message Message to return to client
+     * @param  int|string  $code    HTTP status code (default 400)
      * @param  mixed       $errors  Error details (validation errors, etc.)
      */
     public static function error(
-        string $message = 'Error',
-        int $code = 400,
+        ?string $message = null,
+        int|string $code = 400,
         mixed $errors = null
     ): JsonResponse {
+        $message = (isset($message) && $message !== '') ? $message : 'An Error Occurred.';
+
+        $code =($code >= 400 && $code <= 599) ? $code : 400;
+
         $response = [
             'success' => false,
             'message' => $message,

@@ -5,9 +5,7 @@ namespace App\Http\Controllers\frontend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Product;
-use App\Services\ProductServiceInterface;
-use Illuminate\Support\Collection;
+use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -21,7 +19,7 @@ class ProductController extends Controller
      */
     function index()
     {
-        $productList = $this->ProductService->getListProduct();
+        $productList = $this->ProductService->getProductPaginate();
         $categories =  $this->ProductService->getListCategory();
 
         return view('frontend.product.index', [

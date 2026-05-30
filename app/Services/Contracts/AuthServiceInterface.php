@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Contracts;
 
 use App\Http\Requests\LoginPostRequest;
 use App\Http\Requests\RegisterRequest;
-use View;
+
 
 interface AuthServiceInterface
 {

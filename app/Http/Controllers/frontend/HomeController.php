@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
-use App\Services\HomeServiceInterface;
+use App\Services\Contracts\HomeServiceInterface;
 
 class HomeController extends Controller
 {
