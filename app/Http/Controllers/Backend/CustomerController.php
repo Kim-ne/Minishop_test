@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Services\Contracts\CustomerServiceInterface;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -70,6 +71,25 @@ class CustomerController extends Controller
             $this->customerService->destroy($id);
 
             return redirect()->route('customer.index')->with('success', 'Customer deleted successfully');
+
+        } catch (\Exception $e)
+        {
+            return redirect()->back()->with('error', $e->getMessage());
+        };
+    }
+
+    /**
+     * Summary of register
+     * @param RegisterRequest $request
+     * @return RedirectResponse
+     */
+    public function register(RegisterRequest $request): RedirectResponse
+    {
+        try
+        {
+            $this->customerService->register($request);
+
+            return redirect()->route('customer.index')->with('success', 'Customer registered successfully');
 
         } catch (\Exception $e)
         {

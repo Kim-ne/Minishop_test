@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginPostRequest;
 use App\Services\Contracts\AuthServiceInterface;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
@@ -20,9 +21,10 @@ class AuthController extends Controller
 
 
     /**
-     * Login page
+     * Sumary Login for admin
+     * @return \Illuminate\View\View
     */
-    function userLogin()
+    function userLogin():View
     {
         $this->authService->login();
         $category = $this->productService->getListCategory();
@@ -67,7 +69,7 @@ class AuthController extends Controller
         ['categories' => $category]);
     }
 
-    function userRegisterPost(RegisterRequest $request)
+    function userRegisterPost(StoreUserRequest $request)
     {
          try
         {

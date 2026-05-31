@@ -2,6 +2,7 @@
 use App\Http\Controllers\Api\V1\ProductApiController as V1ProductApiController;
 use App\Http\Controllers\Api\V1\AuthApiController as V1AuthApiController;
 use App\Http\Controllers\Api\V1\OrderApiController as V1OrderApiController;
+use App\Http\Controllers\Api\V1\CustomerApiController as V1CustomerApiController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductApiController;
@@ -46,8 +47,8 @@ Route::prefix('orders')->controller(OrderApiController::class)->group(function (
 Route::middleware(['auth:sanctum'])->group(function () {
     // Auth Routes - need token
     Route::prefix('auth')->controller(AuthApiController::class)->group(function () {
-        Route::post('/logout','logout');    // POST   /api/auth/logout
-        Route::get('/me','me');             // GET    /api/auth/me
+        Route::post('/logout','logout');        // POST   /api/auth/logout
+        Route::get('/me','me');                 // GET    /api/auth/me
     });
     // Product routes - need token
     Route::prefix('products')->controller(ProductApiController::class)->group(function () {
@@ -68,10 +69,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
 // V1 routes - api/v1/...
 // -------------------------------------
 Route::prefix('v1')->name('api.v1.')->group(function () {
-    // public routes
+    // public auth routes
     Route::prefix('auth')->controller(V1AuthApiController::class)->group(function () {
         Route::post('/login','login')            // POST   /api/v1/auth/
             ->middleware('throttle:api.login');
+        Route::post('/register','register');    // POST   /api/v1/auth/register
+    });
+
+    // public customer route
+    Route::prefix('customer')->controller(V1CustomerApiController::class)->group(function () {
+        Route::post('/register','register');    // POST   /api/v1/customer/register
     });
 
     // protected

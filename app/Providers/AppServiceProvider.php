@@ -64,6 +64,12 @@ class AppServiceProvider extends ServiceProvider
             \App\Services\AuthApiService::class
         );
 
+        // CustomerApiServiceInterface
+        $this->app->bind(
+            \App\Services\Contracts\CustomerApiServiceInterface::class,
+            \App\Services\CustomerApiService::class
+        );
+
         // ProductRepositoryInterface
         $this->app->bind(
             \App\Repositories\Contracts\ProductRepositoryInterface::class,

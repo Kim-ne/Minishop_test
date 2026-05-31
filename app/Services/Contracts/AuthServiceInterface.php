@@ -4,6 +4,7 @@ namespace App\Services\Contracts;
 
 use App\Http\Requests\LoginPostRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\StoreUserRequest;
 
 
 interface AuthServiceInterface
@@ -24,6 +25,6 @@ interface AuthServiceInterface
 
     public function registerPost(RegisterRequest $request): mixed;
 
-    public function userRegisterPost(RegisterRequest $request): mixed;
+    public function userRegisterPost(StoreUserRequest $request): mixed;
 
 }

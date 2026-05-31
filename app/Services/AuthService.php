@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Http\Requests\LoginPostRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Events\UserRegistered;
 use App\Services\Contracts\AuthServiceInterface;
 use App\Models\Customer;
 use App\Models\User;
@@ -135,18 +137,9 @@ class AuthService implements AuthServiceInterface
         return $user;
     }
 
-    public function userRegisterPost(RegisterRequest $request): mixed
+    public function userRegisterPost(StoreUserRequest $request): mixed
     {
         $validated = $request->validated();
-
-        if(User::nameExists($validated['name']))
-        {
-            throw new \Exception('Name already exists');
-        }
-        if(User::emailExists($validated['email']))
-        {
-            throw new \Exception('Email already exists');
-        }
 
         if(Customer::emailExists($validated['email']))
         {
@@ -160,6 +153,8 @@ class AuthService implements AuthServiceInterface
                     'phone' => $validated['phone'] ?? null,
                     'country' => $validated['country'] ?? null,
             ]);
+
+        UserRegistered::dispatch($user);
 
         return $user;
     }

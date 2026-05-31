@@ -4,7 +4,7 @@ namespace App\Services;
 
 
 use App\Models\Customer;
-use App\Services\Contracts\CustomerServiceInterface;
+use App\Services\Contracts\CustomerApiServiceInterface;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +12,7 @@ use App\Events\CustomerRegistered;
 use App\Models\User;
 
 
-class CustomerService implements CustomerServiceInterface
+class CustomerApiService implements CustomerApiServiceInterface
 {
     /**
      * Summary of index
@@ -78,16 +78,35 @@ class CustomerService implements CustomerServiceInterface
     {
         $validated = $request->validated();
 
+        if(User::emailExists($validated['email']))
+        {
+            throw new \Exception('Email already exists');
+        }
+
         $customer = Customer::create([
             'firstname' => $validated['firstname'],
             'lastname' => $validated['lastname'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'password' => $validated['password'],
             'phone' => $validated['phone'] ?? null,
             'country' => $validated['country'] ?? null,
+            'address' => $validated['address'] ?? null,
+            'city' => $validated['city'] ?? null,
+            'state' => $validated['state'] ?? null,
+            'zipcode' => $validated['zipcode'],
+            'status' => Customer::STATUS_ACTIVE,
+            'ship_firstname' => $validated['ship_firstname'] ?? $validated['firstname'],
+            'ship_lastname' => $validated['ship_lastname'] ?? $validated['lastname'],
+            'ship_email' => $validated['ship_email'] ?? $validated['email'],
+            'ship_phone' => $validated['ship_phone'] ?? $validated['phone'],
+            'ship_address' => $validated['ship_address'] ?? $validated['address'],
+            'ship_country' => $validated['ship_country'] ?? $validated['country'],
+            'ship_city' => $validated['ship_city'] ?? $validated['city'],
+            'ship_zipcode' => $validated['ship_zipcode'] ?? $validated['zipcode'],
+            'notes' => $validated['notes'] ?? 'Nothing',
         ]);
 
-        CustomerRegistered::dispatch($customer);
+        customerRegistered::dispatch($customer);
 
         return $customer;
 

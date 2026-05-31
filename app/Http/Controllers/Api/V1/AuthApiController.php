@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Services\Contracts\AuthApiServiceInterface;
 use App\Http\Requests\Api\LoginApiRequest;
+use App\Http\Requests\StoreUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -60,5 +61,24 @@ class AuthApiController extends BaseApiV1Controller
         $data = $this->authApiService->me($request);
 
         return $this->success($data, 'User retrieved successfully');
+    }
+
+    /**
+     * Summary of register
+     * Post /api/auth/register
+     * @param StoreUserRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(StoreUserRequest $request): JsonResponse
+    {
+        try {
+            $data = $this->authApiService->register($request);
+
+            return $this->success($data, 'Register successfully');
+
+        } catch (\Exception $e) {
+            [$message, $code] = $this->parseException($e,'Failed to register.');
+            return $this->error($message, $code);
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Repositories\Contracts\OrderRepositoryInterface;
 use App\Services\Contracts\OrderServiceInterface;
+use App\Events\OrderPlaced;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 
@@ -32,7 +33,10 @@ class OrderService implements OrderServiceInterface
 
     public function store(array $data): Order
     {
-        return $this->OrderRepository->store($data);
+        $order = $this->OrderRepository->store($data);
+        OrderPlaced::dispatch($order);
+
+        return $order;
     }
 
     public function updateStatus(int $id, int $status): Order

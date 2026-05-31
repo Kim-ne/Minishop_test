@@ -6,7 +6,8 @@ use App\Models\Customer;
 use Illuminate\Support\Collection;
 use App\Http\Requests\RegisterRequest;
 
-interface CustomerServiceInterface
+
+interface CustomerApiServiceInterface
 {
     public function index(): Collection;
 
