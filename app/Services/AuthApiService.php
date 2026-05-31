@@ -4,7 +4,7 @@ namespace App\Services;
 
 
 use App\Services\Contracts\AuthApiServiceInterface;
-use App\Http\Requests\LoginApiRequest;
+use App\Http\Requests\Api\LoginApiRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

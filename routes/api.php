@@ -1,4 +1,7 @@
 <?php
+use App\Http\Controllers\Api\V1\ProductApiController as V1ProductApiController;
+use App\Http\Controllers\Api\V1\AuthApiController as V1AuthApiController;
+use App\Http\Controllers\Api\V1\OrderApiController as V1OrderApiController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductApiController;
@@ -21,7 +24,8 @@ Route::get('/ping', function () {
 // Auth Routes - public
 // -------------------------------------
 Route::prefix('auth')->controller(AuthApiController::class)->group(function () {
-    Route::post('/login','login');          // POST   /api/user/login
+    Route::post('/login','login')           // POST   /api/user/login
+        ->middleware('throttle:api.login');
 });
 
 //  -------------------------------------
@@ -63,21 +67,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
 // -------------------------------------
 // V1 routes - api/v1/...
 // -------------------------------------
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->name('api.v1.')->group(function () {
     // public routes
-    Route::prefix('auth')->controller(AuthApiController::class)->group(function () {
-        Route::post('/login','login');          // POST   /api/v1/auth/login
+    Route::prefix('auth')->controller(V1AuthApiController::class)->group(function () {
+        Route::post('/login','login')            // POST   /api/v1/auth/
+            ->middleware('throttle:api.login');
     });
 
     // protected
     Route::middleware(['auth:sanctum'])->group(function () {
 
-        Route::prefix('auth')->controller(AuthApiController::class)->group(function () {
+        Route::prefix('auth')->controller(V1AuthApiController::class)->group(function () {
             Route::post('/logout','logout');    // POST   /api/v1/auth/logout
             Route::get('/me','me');             // GET    /api/v1/auth/me
         });
 
-        Route::prefix('products')->controller(ProductApiController::class)->group(function () {
+        Route::prefix('products')->controller(V1ProductApiController::class)->group(function () {
             Route::get('/','index');              // GET    /api/v1/products
             Route::get('/{id}','show');           // GET    /api/v1/products/{id}
             Route::post('/','store');             // POST   /api/v1/products
@@ -87,7 +92,7 @@ Route::prefix('v1')->group(function () {
             Route::patch('/{id}/featured','toggleFeatured');    // PATCH /api/v1/products/{id}/featured
         });
 
-        Route::prefix('orders')->controller(OrderApiController::class)->group(function () {
+        Route::prefix('orders')->controller(V1OrderApiController::class)->group(function () {
             Route::get('/','index');                // GET    /api/v1/orders
             Route::get('/{id}','show');             // GET    /api/v1/orders/{id}
             Route::post('/','store');               // POST   /api/v1/orders
