@@ -7,16 +7,16 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Customer;
+use App\Models\Order;
 
-class WelcomeCustomerMail extends Mailable
+class OrderStatusChangedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public Customer $customer)
+    public function __construct(public Order $order)
     {
     }
 
@@ -26,7 +26,7 @@ class WelcomeCustomerMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome to Minishop',
+            subject: 'Update on Your Order Status' . $this->order->getStatusLabelAttribute()
         );
     }
 
@@ -36,7 +36,7 @@ class WelcomeCustomerMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.customer.welcome',
+            markdown: 'emails.order.status-changed',
         );
     }
 

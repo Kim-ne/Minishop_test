@@ -4,9 +4,10 @@ namespace App\Listeners;
 
 use App\Events\UserRegistered;
 use App\Mail\WelcomeMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 
-class SendWelcomeEmail
+class SendWelcomeEmail implements ShouldQueue
 {
     public int $tries = 3;
     public int $backoff = 5;

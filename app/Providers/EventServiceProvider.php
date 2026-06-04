@@ -9,6 +9,7 @@ use App\Listeners\SendWelcomeCustomerEmail;
 use App\Events\UserRegistered;
 use App\Events\CustomerRegistered;
 use App\Events\OrderPlaced;
+use App\Events\OrderStatusUpdated;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,11 @@ class EventServiceProvider extends ServiceProvider
         // Register OrderPlaced
         OrderPlaced::class => [
             SendOrderConfirmationEmail::class
+        ],
+
+        // Register OrderStatusUpdated
+        OrderStatusUpdated::class => [
+            SendOrderStatusEmail::class
         ]
     ];
 

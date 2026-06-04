@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Repositories\Contracts\OrderRepositoryInterface;
 use App\Services\Contracts\OrderServiceInterface;
 use App\Events\OrderPlaced;
+use App\Events\OrderStatusUpdated;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 
@@ -49,6 +50,8 @@ class OrderService implements OrderServiceInterface
         }
 
         $order -> update(['status' => $status]);
+
+        OrderStatusUpdated::dispatch($order);
 
         return $order->load(['customer', 'items.product']);
     }
