@@ -18,20 +18,38 @@
             <div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i>
             </div>
         </div>
-        <div class="left-header col-xxl-5 col-xl-6 col-lg-5 col-md-4 col-sm-3 p-0">
-            <div class="notification-slider">
-                <div class="d-flex h-100"> <img src="/Backend/assets/images/giftools.gif" alt="gif">
-                    <h6 class="mb-0 f-w-400"><span class="font-primary">Hello: admin {{ Auth()->guard('user')->user()->name }}  </span> </h6><span class="f-light">
-                             Have a nice day</span><i class="icon-arrow-top-right f-light"></i>
-                </div>
-                <div class="d-flex h-100"><img src="/Backend/assets/images/giftools.gif" alt="gif">
-                    <h6 class="mb-0 f-w-400"><span class="f-light">Wellcome back your shop </span>
-                    </h6><a class="ms-1" href="#" target="_blank">Check new notification !</a>
+        @if(Auth()->guard('user')->check())
+            <div class="left-header col-xxl-5 col-xl-6 col-lg-5 col-md-4 col-sm-3 p-0">
+                <div class="notification-slider">
+                    <div class="d-flex h-100"> <img src="/Backend/assets/images/giftools.gif" alt="gif">
+                        <h6 class="mb-0 f-w-400"><span class="font-primary">
+                                Hello: {{ ucfirst(Auth()->guard('user')->user()->role) }}
+                                {{ ucfirst(Auth()->guard('user')->user()->name) }}</span> </h6><span class="f-light">
+                            Have a nice day</span><i class="icon-arrow-top-right f-light"></i>
+                    </div>
+                    <div class="d-flex h-100"><img src="/Backend/assets/images/giftools.gif" alt="gif">
+                        <h6 class="mb-0 f-w-400"><span class="f-light">Wellcome back your shop </span>
+                        </h6><a class="ms-1" href="#" target="_blank">Check new notification !</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="left-header col-xxl-5 col-xl-6 col-lg-5 col-md-4 col-sm-3 p-0">
+                <div class="notification-slider">
+                    <div class="d-flex h-100"> <img src="/Backend/assets/images/giftools.gif" alt="gif">
+                        <h6 class="mb-0 f-w-400"><span class="font-primary">
+                                <a href="{{ route('user.login') }}">Please Login</a></span> </h6>
+                        <span class="f-light"> Have a nice day</span><i class="icon-arrow-top-right f-light"></i>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <div class="nav-right col-xxl-7 col-xl-6 col-md-7 col-8 pull-right right-header p-0 ms-auto">
             <ul class="nav-menus">
+                @if (!Auth()->guard('user')->check())
+                    <li><a href="{{ route('user.login') }}">Sign In</a></li>
+                @endif
                 <li class="language-nav">
                     <div class="translate_wrapper">
                         <div class="current_lang">
@@ -204,19 +222,25 @@
                     </div>
                 </li>
                 <li class="profile-nav onhover-dropdown pe-0 py-0">
-                    <div class="media profile-media"><img class="b-r-10"
-                            src="/Backend/assets/images/dashboard/profile.png" alt="">
-                        <div class="media-body"><span>{{ Auth()->guard('user')->user()->name }}</span>
-                            <p class="mb-0 font-roboto">{{ ucfirst(Auth()->guard('user')->user()->role) }}<i class="middle fa fa-angle-down"></i></p>
+                    @if (Auth()->guard('user')->check())
+                        <div class="media profile-media"><img class="b-r-10"
+                                src="/Backend/assets/images/dashboard/profile.png" alt="">
+                            <div class="media-body"><span>{{ Auth()->guard('user')->user()->name }}</span>
+                                <p class="mb-0 font-roboto">{{ ucfirst(Auth()->guard('user')->user()->role) }}<i
+                                        class="middle fa fa-angle-down"></i></p>
+                            </div>
                         </div>
-                    </div>
-                    <ul class="profile-dropdown onhover-show-div">
-                        <li><a href="{{ route('userProfile') }}"><i data-feather="user"></i><span>Account </span></a></li>
-                        <li><a href="#"><i data-feather="mail"></i><span>Inbox</span></a></li>
-                        <li><a href="#"><i data-feather="file-text"></i><span>Taskboard</span></a></li>
-                        <li><a href="#"><i data-feather="settings"></i><span>Settings</span></a></li>
-                        <li><a href="{{ route('user.logout') }}"><i data-feather="log-in"> </i><span>Log out</span></a></li>
-                    </ul>
+                        <ul class="profile-dropdown onhover-show-div">
+                            <li><a href="{{ route('userProfile') }}"><i data-feather="user"></i><span>Account </span></a>
+                            </li>
+                            <li><a href="#"><i data-feather="mail"></i><span>Inbox</span></a></li>
+                            <li><a href="#"><i data-feather="file-text"></i><span>Taskboard</span></a></li>
+                            <li><a href="#"><i data-feather="settings"></i><span>Settings</span></a></li>
+                            <li><a href="{{ route('user.logout') }}"><i data-feather="log-in"> </i><span>Log out</span></a>
+                            </li>
+                        </ul>
+                    @endif
+
                 </li>
             </ul>
         </div>

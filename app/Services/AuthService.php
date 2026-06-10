@@ -5,23 +5,42 @@ namespace App\Services;
 use App\Http\Requests\LoginPostRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Events\UserRegistered;
+use App\Events\UserForgotPasswordWeb;
+use App\Repositories\Contracts\AuthRepositoryInterface;
 use App\Services\Contracts\AuthServiceInterface;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 
 class AuthService implements AuthServiceInterface
 {
+    public function __construct(
+        protected AuthRepositoryInterface $authRepository
+    )
+    {}
+
+    /**
+     * Summary of login
+     * @return null
+     */
     public function login(): mixed
     {
         // This method can be used for any pre-login logic if needed in the future
-        return null;
+        return null;    
     }
 
-    public function loginPost(LoginPostRequest $request): mixed
+    /**
+     * Summary of loginPost
+     * @param LoginPostRequest $request
+     * @return Customer
+     */
+    public function loginPost(LoginPostRequest $request): Customer
     {
         $validated = $request->validated();
 
@@ -50,7 +69,12 @@ class AuthService implements AuthServiceInterface
         return $customer;
     }
 
-    public function userLoginPost(LoginPostRequest $request): mixed
+    /**
+     * Summary of userLoginPost
+     * @param LoginPostRequest $request
+     * @return User
+     */
+    public function userLoginPost(LoginPostRequest $request): User
     {
         $validated = $request->validated();
 
@@ -80,6 +104,10 @@ class AuthService implements AuthServiceInterface
         return $user;
     }
 
+    /**
+     * Summary of logout
+     * @return void
+     */
     public function logout(): void
     {
         Auth::guard('buyer')->logout();
@@ -88,6 +116,10 @@ class AuthService implements AuthServiceInterface
 
     }
 
+    /**
+     * Summary of userLogout
+     * @return void
+     */
     public function userLogout(): void
     {
         Auth::guard('user')->logout();
@@ -96,17 +128,30 @@ class AuthService implements AuthServiceInterface
 
     }
 
+    /**
+     * Summary of register
+     * @return mixed
+     */
     public function register(): mixed
     {
         return null;
     }
 
+    /**
+     * Summary of userRegister
+     * @return mixed
+     */
     public function userRegister(): mixed
     {
         return null;
     }
 
-    public function registerPost(RegisterRequest $request): mixed
+    /**
+     * Summary of registerPost
+     * @param RegisterRequest $request
+     * @return Customer
+     */
+    public function registerPost(RegisterRequest $request): Customer
     {
         $validated = $request->validated();
 
@@ -126,7 +171,7 @@ class AuthService implements AuthServiceInterface
         }
 
 
-        $user = User::create([
+        $customer = Customer::create([
                     'name' => $validated['name'],
                     'email' => $validated['email'],
                     'password' => Hash::make($validated['password']),
@@ -134,10 +179,15 @@ class AuthService implements AuthServiceInterface
                     'country' => $validated['country'] ?? null,
             ]);
 
-        return $user;
+        return $customer;
     }
 
-    public function userRegisterPost(StoreUserRequest $request): mixed
+    /**
+     * Summary of userRegisterPost
+     * @param StoreUserRequest $request
+     * @return User
+     */
+    public function userRegisterPost(StoreUserRequest $request): User
     {
         $validated = $request->validated();
 
@@ -159,7 +209,11 @@ class AuthService implements AuthServiceInterface
         return $user;
     }
 
-    public function me(): mixed
+    /**
+     * Summary of me
+     * @return User
+     */
+    public function me(): User
     {
         if (Auth::guard('user')->check()) {
             return Auth::guard('user')->user();
@@ -170,6 +224,53 @@ class AuthService implements AuthServiceInterface
         }
 
         return null;
+    }
+
+    /**
+     * Summary of forgotPassword
+     * @param ForgotPasswordRequest $request
+     * @return void
+     */
+    public function forgotPassword(ForgotPasswordRequest $request): void
+    {
+        $user = User::where('email', $request->email)->first();
+
+        if(!$user)
+        {
+            return;
+        }
+
+        $token = Str::random(64);
+
+        $this->authRepository->createToken($user->email, $token);
+
+        UserForgotPasswordWeb::dispatch($user, $token);
+    }
+
+    /**
+     * Summary of resetPassword
+     * @param ResetPasswordRequest $request
+     * @return void
+     */
+    public function resetPassword(ResetPasswordRequest $request): void
+    {
+        $record = $this->authRepository->findByEmailAndTokens($request->email, $request->token);
+
+        if(!$record)
+        {
+            throw new \Exception('Token not found or expired');
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if(!$user)
+        {
+            throw new \Exception('User not found');
+        }
+
+        $user->update(['password' => Hash::make($request->password)]);
+
+        $this->authRepository->deleteByEmail($request->email);
     }
 }
 

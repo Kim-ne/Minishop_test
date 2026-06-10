@@ -6,10 +6,14 @@ use Illuminate\Support\ServiceProvider;
 use App\Listeners\SendWelcomeEmail;
 use App\Listeners\SendOrderConfirmationEmail;
 use App\Listeners\SendWelcomeCustomerEmail;
+use App\Listeners\SendForgotPasswordEmail;
+use App\Listeners\SendForgotPasswordWebEmail;
 use App\Events\UserRegistered;
 use App\Events\CustomerRegistered;
 use App\Events\OrderPlaced;
 use App\Events\OrderStatusUpdated;
+use App\Events\UserForgotPassword;
+use App\Events\UserForgotPasswordWeb;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -37,7 +41,18 @@ class EventServiceProvider extends ServiceProvider
         // Register OrderStatusUpdated
         OrderStatusUpdated::class => [
             SendOrderStatusEmail::class
+        ],
+
+        // Register UserForgotPassword
+        UserForgotPassword::class => [
+            SendForgotPasswordEmail::class
+        ],
+
+        // Register UserForgotPasswordWeb
+        UserForgotPasswordWeb::class => [
+            SendForgotPasswordWebEmail::class
         ]
+
     ];
 
 }

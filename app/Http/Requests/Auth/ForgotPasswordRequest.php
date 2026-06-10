@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginApiRequest extends FormRequest
+class ForgotPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +23,16 @@ class LoginApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
-            'password' => 'required|min:6|max:30',
+            'email' => ['required', 'email','string'],
         ];
     }
 
-    public function messages()
+    public function messages():array
     {
         return [
             'email.required' => 'Email is required',
-            'password.required' => 'Password is required',
-            'password.min' => 'Password must be at least 6 characters',
-            'password.max' => 'Password must be at most 30 characters',
+            'email.email' => 'Email is invalid',
         ];
     }
+
 }

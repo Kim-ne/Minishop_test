@@ -70,6 +70,12 @@ class AppServiceProvider extends ServiceProvider
             \App\Services\CustomerApiService::class
         );
 
+          // OrderServiceInterface
+        $this->app->bind(
+            \App\Services\Contracts\OrderServiceInterface::class,
+            \App\Services\OrderService::class
+        );
+
         // ProductRepositoryInterface
         $this->app->bind(
             \App\Repositories\Contracts\ProductRepositoryInterface::class,
@@ -82,11 +88,13 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\OrderRepository::class
         );
 
-        // OrderServiceInterface
+        // AuthRepositoryInterface
         $this->app->bind(
-            \App\Services\Contracts\OrderServiceInterface::class,
-            \App\Services\OrderService::class
+            \App\Repositories\Contracts\AuthRepositoryInterface::class,
+            \App\Repositories\AuthRepository::class
         );
+
+
     }
 
     /**

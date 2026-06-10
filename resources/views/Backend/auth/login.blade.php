@@ -41,7 +41,7 @@
                                     <div class="checkbox p-0">
                                         <input id="checkbox1" type="checkbox">
                                         <label class="text-muted" for="checkbox1">Remember password</label>
-                                    </div><a class="link" href="forget-password-2.html">Forgot password?</a>
+                                    </div><a class="link" href="{{ route('user.forgot-password') }}">Forgot password?</a>
                                     <div class="text-end mt-3">
                                         <button class="btn btn-primary btn-block w-100" type="submit">Sign in</button>
                                     </div>
@@ -56,7 +56,7 @@
                                                 class="txt-fb" data-feather="facebook"></i>facebook</a></div>
                                 </div>
                                 <p class="mt-4 mb-0 text-center">Don't have account?<a class="ms-2"
-                                        href="sign-up-2.html">Create
+                                        href="{{ route('userRegister') }}">Create
                                         Account</a></p>
                             </form>
                         </div>

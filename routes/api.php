@@ -71,9 +71,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::prefix('v1')->name('api.v1.')->group(function () {
     // public auth routes
     Route::prefix('auth')->controller(V1AuthApiController::class)->group(function () {
-        Route::post('/login','login')            // POST   /api/v1/auth/
+        Route::post('/login','login')                        // POST   /api/v1/auth/
             ->middleware('throttle:api.login');
-        Route::post('/register','register');    // POST   /api/v1/auth/register
+        Route::post('/register','register');                 // POST   /api/v1/auth/register
+        Route::post('/forgot-Password','forgotPassword');    // POST   /api/v1/auth/ForgotPassword
+        Route::post('/reset-Password','resetPassword');      // POST   /api/v1/auth/ResetPassword
     });
 
     // public customer route

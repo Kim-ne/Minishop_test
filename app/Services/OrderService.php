@@ -27,11 +27,21 @@ class OrderService implements OrderServiceInterface
        return $this->OrderRepository->getPaginated($filters);
     }
 
+    /**
+     * Summary of show
+     * @param int $id
+     * @return Order
+     */
     public function show(int $id): Order
     {
         return $this->OrderRepository->show($id);
     }
 
+    /**
+     * Summary of store
+     * @param array $data
+     * @return Order
+     */
     public function store(array $data): Order
     {
         $order = $this->OrderRepository->store($data);
@@ -40,6 +50,13 @@ class OrderService implements OrderServiceInterface
         return $order;
     }
 
+    /**
+     * Summary of updateStatus
+     * @param int $id
+     * @param int $status
+     * @throws \Exception
+     * @return Order
+     */
     public function updateStatus(int $id, int $status): Order
     {
         $order = Order::findOrFail($id);
@@ -56,6 +73,12 @@ class OrderService implements OrderServiceInterface
         return $order->load(['customer', 'items.product']);
     }
 
+    /**
+     * Summary of destroy
+     * @param int $id
+     * @throws \Exception
+     * @return bool
+     */
     public function destroy(int $id): bool
     {
         $order = Order::with('items')->findOrFail($id);

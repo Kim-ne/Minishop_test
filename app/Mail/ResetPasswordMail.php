@@ -7,16 +7,19 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Order;
+use App\Models\User;
 
-class OrderStatusChangedMail extends Mailable
+class ResetPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public Order $order)
+    public function __construct(
+        public readonly User $user,
+        public readonly string $token,
+    )
     {}
 
     /**
@@ -25,7 +28,7 @@ class OrderStatusChangedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Update on Your Order Status' . $this->order->getStatusLabelAttribute()
+            subject: 'Reset Password Mail',
         );
     }
 
@@ -35,7 +38,14 @@ class OrderStatusChangedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.order.status-changed',
+            markdown: 'emails.Auth.ResetPasswordMail',
+            with: [
+                'user' => $this->user,
+                'token' => $this->token,
+                'resetLink' => url('Api/v1/Auth/reset-Password')
+                    .'?token='.$this->token
+                    .'&email='.urlencode($this->user->email)
+            ]
         );
     }
 }

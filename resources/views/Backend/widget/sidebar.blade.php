@@ -29,8 +29,7 @@
                         </div>
                     </li>
                     <li class="sidebar-list"><i class="fa fa-thumb-tack"></i>
-                        <label class="badge badge-light-primary"></label><a class="sidebar-link sidebar-title"
-                            href="#">
+                        <label class="badge badge-light-primary"></label><a class="sidebar-link sidebar-title" href="#">
                             <svg class="stroke-icon">
                                 <use href="/Backend/assets/svg/icon-sprite.svg#stroke-home"></use>
                             </svg>
@@ -43,8 +42,7 @@
                         </ul>
                     </li>
                     <li class="sidebar-list"><i class="fa fa-thumb-tack"></i>
-                        <label class="badge badge-light-primary"></label><a class="sidebar-link sidebar-title"
-                            href="#">
+                        <label class="badge badge-light-primary"></label><a class="sidebar-link sidebar-title" href="#">
                             <svg class="stroke-icon">
                                 <use href="/Backend/assets/svg/icon-sprite.svg#user-visitor"></use>
                             </svg>
@@ -85,11 +83,11 @@
                             </svg><span>Customers</span></a>
                         <ul class="sidebar-submenu">
                             <li><a href="{{ route('customer.index') }}">Customers List</a></li>
-                            @if (auth()->guard('user')->user()->role == 'manager')
+                            @if (auth()->guard('user')->check() && auth()->guard('user')->user()->hasRole('admin'))
                                 <li><a href="{{ route('roles.index') }}">Role</a></li>
+                            @else
 
                             @endif
-
                         </ul>
                     </li>
 

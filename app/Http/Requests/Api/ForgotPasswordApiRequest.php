@@ -4,8 +4,11 @@ namespace App\Http\Requests\Api;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Helper\ApiResponse;
 
-class LoginApiRequest extends FormRequest
+class ForgotPasswordApiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +26,25 @@ class LoginApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
-            'password' => 'required|min:6|max:30',
+            'email' => ['required', 'email','string'],
         ];
     }
 
-    public function messages()
+    public function messages():array
     {
         return [
             'email.required' => 'Email is required',
-            'password.required' => 'Password is required',
-            'password.min' => 'Password must be at least 6 characters',
-            'password.max' => 'Password must be at most 30 characters',
+            'email.email' => 'Email is invalid',
         ];
+    }
+
+    protected function failedValidation(Validator $validator): void
+    {
+       throw new HttpResponseException(
+            ApiResponse::error(
+                $validator->errors()
+                ->first(), 422)
+
+       );
     }
 }
