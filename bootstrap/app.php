@@ -23,7 +23,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
         'auth.user' => AuthUserMiddleware::class,
         'auth.customer' => AuthCustomerMiddleware::class,
-        'role' => \App\Http\Middleware\CheckRole::class]);
+        'role' => \App\Http\Middleware\CheckRole::class,
+        'email.verified' => \App\Http\Middleware\EnsureUserEmailIsVerified::class,]);
         $middleware->api(prepend:[
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
@@ -66,6 +67,20 @@ return Application::configure(basePath: dirname(__DIR__))
                 $model = class_basename($e->getModel());
 
                 return ApiResponse::notFound(" {$model} not found. ");
+            }
+        });
+
+        $exceptions->render(function (\Exception $e, $request) {
+            if($request->expectsJson())
+            {
+                $code = (int) $e->getCode();
+                $code = ($code >= 400 && $code <= 599) ? $code : 500;
+
+                $message = ($code === 500 && !config('app.debug'))
+                    ? 'Internal Server Error'
+                    : $e->getMessage();
+
+                return ApiResponse::error($message, $code);
             }
         });
 

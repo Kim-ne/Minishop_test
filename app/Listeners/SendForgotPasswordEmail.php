@@ -20,6 +20,6 @@ class SendForgotPasswordEmail implements ShouldQueue
     public function handle(UserForgotPassword $event): void
     {
         Mail::to($event->user->email)
-            ->send(new ResetPasswordMail($event->user, $event->token));
+            ->send(new ResetPasswordMail($event->user, $event->token, $event->resetLink));
     }
 }

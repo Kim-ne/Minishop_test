@@ -6,7 +6,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 
-class UserForgotPassword
+class UserEmailVerification
 {
     use Dispatchable, SerializesModels;
 
@@ -14,9 +14,7 @@ class UserForgotPassword
      * Create a new event instance.
      */
     public function __construct(
-        public readonly User $user,
-        public readonly string $token,
-        public readonly string $resetLink)
+        public User $user,
+        public string $verificationRoute)
     {}
-
 }

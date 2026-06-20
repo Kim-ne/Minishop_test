@@ -10,7 +10,7 @@ Your account registration details are as follows:
 
 Happy shopping!
 
-<x-mail::button :url="'/'">
+<x-mail::button :url="route('home')">
 Go to Mini Shop
 </x-mail::button>
 

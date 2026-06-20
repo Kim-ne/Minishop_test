@@ -4,9 +4,10 @@ namespace App\Services;
 
 use App\Events\UserRegistered;
 use App\Events\UserForgotPassword;
+use App\Events\UserEmailVerification;
 use App\Http\Requests\Api\LoginApiRequest;
 use App\Http\Requests\Api\ForgotPasswordApiRequest;
-use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\Api\StoreUserApiRequest;
 use App\Http\Requests\Api\ResetPasswordApiRequest;
 use App\Services\Contracts\AuthApiServiceInterface;
 use App\Repositories\Contracts\AuthRepositoryInterface;
@@ -26,7 +27,6 @@ class AuthApiService implements AuthApiServiceInterface
     /**
      * Login the user
      * Post /api/auth/login
-     *
      * @param LoginApiRequest $request
      * @return array
      */
@@ -46,12 +46,24 @@ class AuthApiService implements AuthApiServiceInterface
             throw new \Exception('User not found after authentication.', 500);
         }
 
+        if(!$user->hasVerifiedEmail())
+        {
+            Auth::guard('user')->logout();
+            throw new \Exception('Please verify your email before logging.', 403);
+        }
+
         $user->tokens()->delete();
-        $token = $user->createToken('api-token')->plainTextToken;
+        $remember = $request->boolean('remember');
+
+
+        $token = $remember
+                ? $user->createToken('api-token')->plainTextToken
+                : $user->createToken('api-token', ['*'], now()->addMinutes(120))->plainTextToken;
 
         return [
             'token'      => $token,
             'token_type' => 'Bearer',
+            'expires_at' => $remember ? null : now()->addMinutes(120)->toDateTimeString(),
             'user'       => [
                 'id'    => $user->id,
                 'name'  => $user->name,
@@ -63,8 +75,8 @@ class AuthApiService implements AuthApiServiceInterface
     /**
      * Logout the user
      * Post /api/auth/logout
-     *
      * @param Request $request
+     * @return void
      */
 
     public function logout(Request $request): void
@@ -75,7 +87,6 @@ class AuthApiService implements AuthApiServiceInterface
     /**
      * Get the authenticated user
      * Get /api/auth/me
-     *
      * @param Request $request
      * @return array
      */
@@ -93,16 +104,17 @@ class AuthApiService implements AuthApiServiceInterface
 
     /**
      * Summary of register
-     * @param StoreUserRequest $request
-     * @return User
+     * Post /api/auth/register
+     * @param StoreUserApiRequest $request
+     * @return void
      */
-    public function register(StoreUserRequest $request): User
+    public function register(StoreUserApiRequest $request): void
     {
         $validated = $request->validated();
 
         if(Customer::emailExists($validated['email']))
         {
-            throw new \Exception('Email already exists');
+            throw new \Exception('Email already exists', 403);
         }
 
         $user = User::create([
@@ -113,10 +125,7 @@ class AuthApiService implements AuthApiServiceInterface
             'country' => $validated['country'] ?? null,
         ]);
 
-        UserRegistered::dispatch($user);
-
-        return $user;
-
+        UserEmailVerification::dispatch($user);
     }
 
     /**
@@ -138,7 +147,29 @@ class AuthApiService implements AuthApiServiceInterface
 
         $this->authRepository->createToken($user->email, $token);
 
-        UserForgotPassword::dispatch($user, $token);
+        $resetLink = Url('api/v1/auth/reset-password'
+                            .'?token=' . $token
+                            .'&email=' . urlencode($user->email));
+
+        UserForgotPassword::dispatch($user, $token, $resetLink);
+    }
+
+    /**
+     * Summary of isValidResetToken
+     * @param string $email
+     * @param string $token
+     * @return bool
+     */
+    public function isValidResetToken(string $email, string $token): bool
+    {
+        $record = $this->authRepository->findByEmailAndTokens($email, $token);
+
+        if(!$record)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -163,8 +194,52 @@ class AuthApiService implements AuthApiServiceInterface
             throw new \Exception('User not found', 404);
         }
 
-        $user->update(['password' => Hash::make($request->password)]);
+        $user->update(['password' => $request->password]);
 
         $this->authRepository->deleteByEmail($request->email);
+    }
+
+    /**
+     * Summary of resendVerificationEmail
+     * Post /api/auth/ResendVerificationEmail
+     * @param string $email
+     * @return void
+     */
+    public function resendVerificationEmail(string $email): void
+    {
+        $user = User::where('email', $email)->first();
+
+        if(!$user || $user->hasVerifiedEmail())
+        {
+            return;
+        }
+
+        UserEmailVerification::dispatch($user);
+    }
+
+    /**
+     * Summary of verifyEmail
+     * Get /api/v1/auth/verify/{id}/{hash}
+     * @param string $id
+     * @param string $hash
+     * @return void
+     */
+    public function verifyEmail(string $id, string $hash): void
+    {
+        $user = User::findOrFail($id);
+
+        if(! hash_equals($hash, sha1($user->email)))
+        {
+            throw new \Exception('Invalid verification link', 400);
+        }
+
+        if($user->hasVerifiedEmail())
+        {
+            throw new \Exception('Email already verified', 400);
+        }
+
+        $user->markEmailAsVerified();
+
+        UserRegistered::dispatch($user,'api.v1.email.verify');
     }
 }

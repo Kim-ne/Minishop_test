@@ -4,7 +4,7 @@ namespace App\Services\Contracts;
 
 use App\Http\Requests\LoginPostRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\Auth\StoreUserRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\User;
@@ -33,4 +33,8 @@ interface AuthServiceInterface
     public function forgotPassword(ForgotPasswordRequest $request): void;
 
     public function resetPassword(ResetPasswordRequest $request): void;
+
+    public function verifyEmail(int $id, string $hash): void;
+
+    public function resendVerification(string $email): void;
 }

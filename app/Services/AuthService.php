@@ -4,11 +4,12 @@ namespace App\Services;
 
 use App\Http\Requests\LoginPostRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\Auth\StoreUserRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Events\UserRegistered;
-use App\Events\UserForgotPasswordWeb;
+use App\Events\UserForgotPassword;
+use App\Events\UserEmailVerification;
 use App\Repositories\Contracts\AuthRepositoryInterface;
 use App\Services\Contracts\AuthServiceInterface;
 use App\Models\Customer;
@@ -25,6 +26,8 @@ class AuthService implements AuthServiceInterface
     )
     {}
 
+    const UNVERIFIED_EMAIL = 'UNVERIFIED_EMAIL';
+
     /**
      * Summary of login
      * @return null
@@ -32,7 +35,7 @@ class AuthService implements AuthServiceInterface
     public function login(): mixed
     {
         // This method can be used for any pre-login logic if needed in the future
-        return null;    
+        return null;
     }
 
     /**
@@ -61,6 +64,12 @@ class AuthService implements AuthServiceInterface
         {
             Auth::guard('buyer')->logout();
             throw new \Exception('Your account is inactive. Please contact support.');
+        }
+
+        if(!$customer->hasVerifiedEmail())
+        {
+            Auth::guard('buyer')->logout();
+            throw new \Exception('Please verify your email before logging.');
         }
 
         $request->session()->regenerate();
@@ -96,6 +105,14 @@ class AuthService implements AuthServiceInterface
         {
             Auth::guard('user')->logout();
             throw new \Exception('Your account is inactive. Please contact support.');
+        }
+
+        if($user && !$user->hasVerifiedEmail())
+        {
+            session(['unverified_email' => $user->email]);
+
+            Auth::guard('user')->logout();
+            throw new \Exception(self::UNVERIFIED_EMAIL);
         }
 
         $request->session()->regenerate();
@@ -204,7 +221,7 @@ class AuthService implements AuthServiceInterface
                     'country' => $validated['country'] ?? null,
             ]);
 
-        UserRegistered::dispatch($user);
+        UserEmailVerification::dispatch($user);
 
         return $user;
     }
@@ -244,7 +261,7 @@ class AuthService implements AuthServiceInterface
 
         $this->authRepository->createToken($user->email, $token);
 
-        UserForgotPasswordWeb::dispatch($user, $token);
+        UserForgotPassword::dispatch($user, $token);
     }
 
     /**
@@ -272,5 +289,46 @@ class AuthService implements AuthServiceInterface
 
         $this->authRepository->deleteByEmail($request->email);
     }
-}
 
+    /**
+     * Summary of verifyEmail
+     * @param int $id
+     * @param string $hash
+     * @return void
+     */
+    public function verifyEmail(int $id,string $hash):void
+    {
+        $user = User::findOrFail($id);
+
+        if(! hash_equals($hash, sha1($user->email)))
+        {
+            throw new \Exception('Invalid hash');
+        }
+
+        if($user->hasVerifiedEmail())
+        {
+            throw new \Exception('Email already verified');
+        }
+
+        $user->markEmailAsVerified();
+
+        UserRegistered::dispatch($user);
+    }
+
+    /**
+     * Summary of ResendVerification
+     * @param string $email
+     * @return void
+     */
+    public function resendVerification(string $email):void
+    {
+        $user = User::where('email', $email)->first();
+
+        if(!$user ||$user->hasVerifiedEmail())
+        {
+            return;
+        }
+
+        UserEmailVerification::dispatch($user,'email.verify');
+    }
+}

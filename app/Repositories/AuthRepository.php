@@ -32,8 +32,6 @@ class AuthRepository implements AuthRepositoryInterface
                 ->where('token', $token)
                 ->first();
 
-        return $record;
-
         if(!$record)
         {
             return null;

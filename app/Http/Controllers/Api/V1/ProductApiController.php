@@ -26,8 +26,6 @@ class ProductApiController extends BaseApiV1Controller
      */
     public function index(Request $request): JsonResponse
     {
-
-
         $filters = $request->only([
             'search', 'category_id', 'status', 'featured',
             'sort_by', 'sort_dir', 'per_page',
@@ -61,19 +59,29 @@ class ProductApiController extends BaseApiV1Controller
     {
         $validated = $request->validated();
 
-         // Xử lý image nếu có upload
+        // Xử lý image nếu có upload
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')
                                           ->store('products', 'public');
         }
+        try{
+            // Tự generate alias từ name
 
-        // Tự generate alias từ name
-        $validated['alias'] = \Illuminate\Support\Str::slug($validated['name']);
-        $validated['description'] = $validated['description'] ?? 'No description provided.';
+            $validated['alias'] = \Illuminate\Support\Str::slug($validated['name']);
+            $validated['description'] = $validated['description'] ?? 'No description provided.';
 
-        $product = Product::create($validated);
+            $product = Product::create($validated);
 
-        return $this->created(new ProductResource($product), 'Product created successfully');
+            return $this->created(new ProductResource($product), 'Product created successfully');
+        } catch (\exception $e) {
+            if(isset($validated['image'])){
+                Storage::disk('public')->delete($validated['image']);
+            }
+            [$message, $code] = $this->parseException($e,'Failed to create product.');
+
+            return $this->error($message, $code);
+        }
+
     }
 
     /**
@@ -114,15 +122,9 @@ class ProductApiController extends BaseApiV1Controller
      */
     public function destroy(string|int $id): JsonResponse
     {
-        try {
-            $this->productService->destroy($id);
-            return $this->success(null, 'Product deleted successfully');
+        $this->productService->destroy($id);
 
-        } catch (\Exception $e) {
-            [$message, $code] = $this->parseException($e,'Failed to delete product.');
-            return $this->error($message, $code);
-        }
-
+        return $this->success(null, 'Product deleted successfully');
     }
 
     /**
@@ -134,6 +136,7 @@ class ProductApiController extends BaseApiV1Controller
     public function toggleStatus(string|int $id): JsonResponse
     {
         $product = $this->productService->toggleStatus($id);
+
         return $this->success(new ProductResource($product), 'Product status updated');
     }
 
@@ -146,6 +149,7 @@ class ProductApiController extends BaseApiV1Controller
     public function toggleFeatured(string|int $id): JsonResponse
     {
         $product = $this->productService->toggleFeatured($id);
+
         return $this->success(new ProductResource($product), 'Product featured status updated');
     }
 

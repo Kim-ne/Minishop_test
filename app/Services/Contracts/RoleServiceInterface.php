@@ -3,7 +3,7 @@
 namespace App\Services\Contracts;
 
 use App\Http\Requests\UpdateUserRequest;
-use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\Auth\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Support\Collection;
 

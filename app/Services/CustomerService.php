@@ -9,7 +9,7 @@ use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use App\Events\CustomerRegistered;
-use App\Models\User;
+
 
 
 class CustomerService implements CustomerServiceInterface
@@ -27,7 +27,7 @@ class CustomerService implements CustomerServiceInterface
 
     /**
      * Summary of store
-
+     * @param int $id
      * @return Customer
      */
 

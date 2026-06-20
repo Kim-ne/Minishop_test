@@ -11,15 +11,18 @@
                             <form class="theme-form">
                                 <h4>Sign in to account</h4>
                                 <p>Enter your email & password to login</p>
-                                @if (session()->has('error'))
-                                    <div class="text-danger py-2">
-                                        {{ session('error') }}
-                                    </div>
+                                @if (session('success'))
+                                    <div class="alert alert-success">{{ session('success') }}</div>
+                                @endif
+
+                                @if (session('error'))
+                                    <div class="alert alert-danger">{{ session('error') }}</div>
                                 @endif
                                 <div class="form-group">
                                     <label class="col-form-label">Email Address</label>
                                     <input class="form-control @error('username') is-invalid @enderror" type="email"
-                                        required="" placeholder="Test@gmail.com" value="{{ old('username') }}" name="username">
+                                        required="" placeholder="Test@gmail.com" value="{{ old('username') }}"
+                                        name="username">
 
                                     @error('username')
                                         <div class="text-danger">{{$message}}</div>
@@ -28,18 +31,17 @@
                                 <div class="form-group">
                                     <label class="col-form-label">Password</label>
                                     <div class="form-input position-relative">
-                                        <input class="form-control @error('password') is-invalid @enderror"
-                                        type="password" name="password" required id="password"
-                                        placeholder="*********">
+                                        <input class="form-control @error('password') is-invalid @enderror" type="password"
+                                            name="password" required id="password" placeholder="*********">
                                         <div class="show-hide" data-target="#password"><span class="show"> </span></div>
                                     </div>
                                     @error('password')
-                                    <div class="text-danger">{{$message}}</div>
+                                        <div class="text-danger">{{$message}}</div>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-0">
                                     <div class="checkbox p-0">
-                                        <input id="checkbox1" type="checkbox">
+                                        <input id="checkbox1" type="checkbox" name="remember" value="1">
                                         <label class="text-muted" for="checkbox1">Remember password</label>
                                     </div><a class="link" href="{{ route('user.forgot-password') }}">Forgot password?</a>
                                     <div class="text-end mt-3">

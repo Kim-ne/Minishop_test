@@ -39,7 +39,7 @@ Route::middleware(['auth.customer'])->group(function () {
 
 //middleware for auth-user
 Route::prefix('user')->group(function () {
-    // GUEST ROUTE
+    // GUEST ROUTE (Public routes)
 
     // Login
     Route::get('/login', [BackendAuthController::class, 'userLogin'])->name('user.login');
@@ -55,8 +55,18 @@ Route::prefix('user')->group(function () {
     Route::get('/reset-password/{token}', [BackendAuthController::class, 'resetPassword'])->name('user.reset-password');
     Route::post('/reset-password', [BackendAuthController::class, 'resetPasswordPost'])->name('user.reset-password.post');
 
-    // AUTHENTICATED ROUTE
-    Route::middleware(['auth.user'])->group(function () {
+    // Route for verify email
+    Route::get('/email/verify', [BackendAuthController::class, 'verifyEmailNotice'])->name('user.verification.notice');
+    Route::post('/email/verify/resend', [BackendAuthController::class, 'resendVerification'])
+        ->middleware('throttle:6,1')
+        ->name('email.verify.resend');
+
+    Route::get('/email/verify/{id}/{hash}', [BackendAuthController::class, 'verifyEmail'])
+        ->middleware('signed')
+        ->name('email.verify');
+
+    // AUTHENTICATED ROUTE (Private routes)
+    Route::middleware(['auth.user','verified:user'])->group(function () {
         // Route product for user
         Route::patch('/products/{id}/stock', [BackendProductController::class, 'updateStock'])->name('products.updateStock');
         Route::get('/products', [BackendProductController::class, 'index'])->name('user.products');

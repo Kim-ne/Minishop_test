@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
 
-class Customer extends Authenticatable
+
+class Customer extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * Summary of table
@@ -62,7 +65,7 @@ class Customer extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public  function getFullNameAttribute()
+    public  function getNameAttribute()
     {
         return $this->firstname . ' ' . $this->lastname;
     }

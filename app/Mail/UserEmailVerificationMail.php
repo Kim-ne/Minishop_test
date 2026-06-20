@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 
-class ResetPasswordMail extends Mailable
+class UserEmailVerificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,9 +17,8 @@ class ResetPasswordMail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public readonly User $user,
-        public readonly string $token,
-        public readonly ?string $resetLink = null,
+        public User $user,
+        public string $verificationUrl
     )
     {}
 
@@ -29,7 +28,7 @@ class ResetPasswordMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset Password Mail',
+            subject: 'User Email Verification Mail',
         );
     }
 
@@ -39,19 +38,7 @@ class ResetPasswordMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.Auth.ResetPasswordMail',
-            with: [
-                'user' => $this->user,
-                'token' => $this->token,
-                'resetLink' => $this->resetLink ?? $this->generateDefaultResetLink()
-            ]
+            markdown: 'emails.Auth.UserEmailVerification',
         );
-    }
-
-    private function generateDefaultResetLink(): string
-    {
-        return route('user.reset-password',
-        ['token' => $this->token,
-        'email' => $this->user->email]);
     }
 }

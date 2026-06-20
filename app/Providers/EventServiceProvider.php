@@ -7,13 +7,17 @@ use App\Listeners\SendWelcomeEmail;
 use App\Listeners\SendOrderConfirmationEmail;
 use App\Listeners\SendWelcomeCustomerEmail;
 use App\Listeners\SendForgotPasswordEmail;
-use App\Listeners\SendForgotPasswordWebEmail;
+use App\Listeners\SendUserEmailVerificationEmail;
+use App\Listeners\SendCustomerForgotPasswordEmail;
+use App\Listeners\SendCustomerVerificationEmail;
 use App\Events\UserRegistered;
 use App\Events\CustomerRegistered;
 use App\Events\OrderPlaced;
 use App\Events\OrderStatusUpdated;
 use App\Events\UserForgotPassword;
-use App\Events\UserForgotPasswordWeb;
+use App\Events\UserEmailVerification;
+use App\Events\CustomerForgotPassword;
+use App\Events\CustomerEmailVerification;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -48,9 +52,19 @@ class EventServiceProvider extends ServiceProvider
             SendForgotPasswordEmail::class
         ],
 
-        // Register UserForgotPasswordWeb
-        UserForgotPasswordWeb::class => [
-            SendForgotPasswordWebEmail::class
+        // Register UserVerified
+        UserEmailVerification::class => [
+            SendUserEmailVerificationEmail::class
+        ],
+
+        // Register CustomerForgotPassword
+        CustomerForgotPassword::class => [
+            SendCustomerForgotPasswordEmail::class
+        ],
+
+        // Register CustomerVerified
+        CustomerEmailVerification::class => [
+            SendCustomerVerificationEmail::class
         ]
 
     ];

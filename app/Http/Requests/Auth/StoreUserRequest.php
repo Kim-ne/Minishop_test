@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,6 +26,7 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email|max:100',
+            'email_confirmation' => 'required|email',
             'password' => [
                 'required',
                 'confirmed',
@@ -35,7 +36,8 @@ class StoreUserRequest extends FormRequest
                     ->numbers()
             ],
             'password_confirmation' => 'required',
-            'role' => 'required|in:manager,staff',
+            'country' => 'nullable|string|max:50',
+            'phone' => 'nullable|string|digits_between:9,15',
         ];
     }
 }

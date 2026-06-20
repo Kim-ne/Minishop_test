@@ -5,13 +5,15 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginPostRequest;
 use App\Services\Contracts\AuthServiceInterface;
-use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\Auth\StoreUserRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Requests\Api\ResendVerificationApiRequest;
 use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -23,11 +25,12 @@ class AuthController extends Controller
     {}
 
 
+
     /**
      * Sumary Login for admin
-     * @return RedirectResponse
+     * @return View|RedirectResponse
     */
-    public function userLogin(): RedirectResponse
+    public function userLogin(): View|RedirectResponse
     {
         if(Auth::guard('user')->check())
         {
@@ -56,8 +59,13 @@ class AuthController extends Controller
 
         } catch (\Exception $e)
         {
+            if($e->getMessage() === \App\Services\AuthService::UNVERIFIED_EMAIL)
+                {
+                    return redirect()->route('user.verification.notice')
+                                    ->with('error', 'Please verify your email address first' );
+                }
             return redirect()->back()
-                            ->withInput($request->only('email'))->with('error', $e->getMessage());
+                            ->withErrors(['login' => $e->getMessage()]);
         }
     }
 
@@ -94,12 +102,9 @@ class AuthController extends Controller
     {
          try
         {
-            $user = $this->authService->userRegisterPost($request);
+            $this->authService->userRegisterPost($request);
 
-            Auth::guard('user')->login($user);
-            $request->session()->regenerate();
-
-            return redirect()->route('user.login')->with('success', 'Registration success');
+            return redirect()->route('user.login')->with('success', 'Registration success! Please check your email for verification');
 
         } catch (\Exception $e)
         {
@@ -158,6 +163,60 @@ class AuthController extends Controller
         } catch (\exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    /**
+     * Summary of verifyEmailNotice
+     * @return View
+     */
+    public function verifyEmailNotice():view
+    {
+        return view('Backend.auth.verify-email');
+    }
+
+    /**
+     * Summary of verifyEmail
+     * @param Request $request
+     * @param int $id
+     * @param string $hash
+     * @return RedirectResponse
+     */
+    public function verifyEmail(Request $request,int $id,string $hash):RedirectResponse
+    {
+
+        try {
+            $this->authService->verifyEmail($id, $hash);
+
+            return redirect()->route('user.login')->with('success', 'Email verified successfully, plaease login');
+        } catch (\Exception $e) {
+            return redirect()->route('user.login')->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Summary of resendVerification
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function resendVerification(Request $request): RedirectResponse
+    {
+        $email = session('unverified_email');
+
+        if(!$email)
+        {
+            return redirect()->route('user.login')->with('error', 'Your session has expired. Please login again.');
+        }
+
+        try
+        {
+            $this->authService->resendVerification($email);
+
+            return redirect()->back()->with('success', 'Verification email sent');
+        } catch (\Exception $e)
+        {
+            return back()->with('error', $e->getMessage());
+        }
+
     }
 
 }

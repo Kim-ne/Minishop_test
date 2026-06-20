@@ -52,7 +52,6 @@ class AuthApiController extends BaseApiController
         return $this->success(null, 'Logout successfully');
     }
 
-
     /**
      * Summary of me
      * Get /api/auth/me
@@ -66,4 +65,5 @@ class AuthApiController extends BaseApiController
 
         return $this->success($data, 'User retrieved successfully');
     }
+
 }

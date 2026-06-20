@@ -60,16 +60,9 @@ class OrderApiController extends BaseApiV1Controller
     public function store(StoreOrderApiRequest $request): JsonResponse
     {
         $validated = $request->validated();
+        $orders = $this->orderService->store($validated);
 
-        try {
-            $orders = $this->orderService->store($validated);
-
-            return $this->success(new OrderResource($orders), 'Order created successfully');
-        } catch (\Exception $e) {
-            [$message, $code] = $this->parseException($e,'Failed to create order.');
-
-            return $this->error($message, $code);
-        }
+        return $this->success(new OrderResource($orders), 'Order created successfully');
     }
 
     /**
@@ -80,16 +73,9 @@ class OrderApiController extends BaseApiV1Controller
      */
     public function destroy(string|int $id): JsonResponse
     {
-        try {
-            $this->orderService->destroy($id);
+        $this->orderService->destroy($id);
 
-            return $this->success(null, 'Order deleted successfully');
-
-        } catch (\Exception $e) {
-            [$message, $code] = $this->parseException($e,'Failed to delete order.');
-
-            return $this->error($message, $code);
-        }
+        return $this->success(null, 'Order deleted successfully');
     }
 
     /**
@@ -102,16 +88,8 @@ class OrderApiController extends BaseApiV1Controller
     public function updateStatus(UpdateStatusOrderApiRequest $request, string|int $id): JsonResponse
     {
         $validated = $request->validated();
+        $order = $this->orderService->updateStatus($id, $validated['status']);
 
-        try {
-            $order = $this->orderService->updateStatus($id, $validated['status']);
-
-            return $this->success(new OrderResource($order), 'Order status updated successfully');
-
-        } catch (\Exception $e) {
-            [$message, $code] = $this->parseException($e,'Failed to update order status.');
-
-            return $this->error($message, $code);
-        }
+        return $this->success(new OrderResource($order), 'Order status updated successfully');
     }
 }
