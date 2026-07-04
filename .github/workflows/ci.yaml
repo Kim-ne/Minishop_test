@@ -41,4 +41,7 @@ jobs:
         run: php artisan key:generate
 
       - name: Step 7
+        run: php artisan migrate --force
+
+      - name: Step 8
         run: php artisan test
