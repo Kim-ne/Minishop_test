@@ -1,0 +1,47 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+env:
+  APP_ENV: 'testing'
+  DB_CONNECTION: 'sqlite'
+  PHP_VERSION: '8.3'
+
+jobs:
+  job-name:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Step 1
+        uses: actions/checkout@v4
+
+      - name: Step 2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer:v2
+
+      - name: Step 3
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Step 4
+        run: cp ./.env.example ./.env
+
+      - name: Step 5
+        run: touch database/database.sqlite
+
+      - name: Step 6
+        run: php artisan key:generate
+
+      - name: Step 7
+        run: php artisan migrate --force
+
+      - name: Step 8
+        run: php artisan test
