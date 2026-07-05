@@ -1,0 +1,63 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: laravel-mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: minishop
+    networks:
+      - local
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel-app
+    volumes:
+      - .:/var/www
+    env_file:
+      - .env
+    networks:
+      - local
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: laravel-nginx
+    volumes:
+      - .:/var/www
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8000:80"
+    networks:
+      - local
+    depends_on:
+      - app
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=secret
+    ports:
+      - "8080:80"
+    networks:
+      - local
+    depends_on:
+      - db
+    restart: unless-stopped
+
+networks:
+  local:
+    driver: bridge
+
+volumes:
+  mysql_data:
