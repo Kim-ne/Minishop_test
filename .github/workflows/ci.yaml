@@ -61,4 +61,19 @@ jobs:
         run: php artisan migrate --force
 
       - name: Step 10
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Step 4
+        run: cp ./.env.example ./.env
+
+      - name: Step 5
+        run: touch database/database.sqlite
+
+      - name: Step 6
+        run: php artisan key:generate
+
+      - name: Step 7
+        run: php artisan migrate --force
+
+      - name: Step 8
         run: php artisan test

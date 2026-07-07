@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">{{ $product->name }}</a>
+                        <a class="h6 text-decoration-none text-truncate" href="{{ route('product.detail', $product->alias) }}">{{ $product->name }}</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
                             <h5>{{ number_format($product->price*1000, 2) }} VND</h5>
                             {{-- <h6 class="text-muted ml-2"><del>${{ number_format($product->price * 1.2, 2) }}</del></h6> --}}
