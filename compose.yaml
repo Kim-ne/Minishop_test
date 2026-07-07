@@ -2,11 +2,19 @@ services:
   db:
     image: mysql:8.0
     container_name: laravel-mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$(cat /run/secrets/db_root_password)"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     volumes:
       - mysql_data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: minishop
+    secrets:
+      - db_root_password
     networks:
       - local
     restart: unless-stopped
@@ -23,7 +31,8 @@ services:
     networks:
       - local
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: unless-stopped
 
   nginx:
@@ -54,6 +63,10 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+
+secrets:
+  db_root_password:
+    file: ./secrets/db_root_password
 
 networks:
   local:

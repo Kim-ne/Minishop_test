@@ -21,6 +21,7 @@
 /storage/pail
 /storage/framework/views/
 /vendor
+/secrets/
 Homestead.json
 Homestead.yaml
 Thumbs.db
