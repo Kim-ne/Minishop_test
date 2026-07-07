@@ -35,18 +35,19 @@ jobs:
           path: vendor
           key: ${{ runner.os }}-php-${{ env.PHP_VERSION }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-php-${{ env.PHP_VERSION }}-composer-
+              ${{ runner.os }}-php-${{ env.PHP_VERSION }}-composer-
 
-      - name: Step 4
-        run: echo "cache-hit: ${{ steps.generate-cache.outputs.cache-hit }}"
+      - name: Check cache
+        run: |
+            echo "cache-hit= ${{ steps.generate-cache.outputs.cache-hit }}"
 
       - name: Step 5
         if: steps.generate-cache.outputs.cache-hit != 'true'
         run: |
-          start=$(date +%s)
-          composer install --no-interaction --prefer-dist --optimize-autoloader
-          end=$(date +%s)
-          echo "Time taken: $((end-start)) seconds"
+            start=$(date +%s)
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            end=$(date +%s)
+            echo "Time taken: $((end-start)) seconds"
 
       - name: Step 6
         run: cp ./.env.example ./.env
