@@ -12,11 +12,16 @@ class Category extends Model
     use HasFactory,Notifiable;
     function product()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class, 'category_id', 'id');
     }
-     static function getList():Collection
+    function count()
     {
-        return self::orderBy('name', 'asc')->take(8)->get();
+        return $this->product()->count();
+    }
+    static function getList():Collection
+    {
+        return self::withCount('product')
+                    ->orderBy('name', 'asc')->take(8)->get();
     }
 
 }

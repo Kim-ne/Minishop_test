@@ -5,6 +5,7 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Services\Interface\HomeServiceInterface;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -13,10 +14,10 @@ class HomeController extends Controller
      * Display a listing of the resource.
      */
     public function __construct(
-        protected HomeServiceInterface $homeService
+        protected HomeServiceInterface $homeService,
     )
     {}
-    function index()
+    function index(Request $request)
     {
        $productList = $this->homeService->getListProduct();
        $categoryList = $this->homeService->getListCategory();
@@ -24,15 +25,10 @@ class HomeController extends Controller
        $data = [
         'products'=>$productList,
         'categories'=>$categoryList,
-        'productsRecent'=>$productListRecent
+        'productsRecent'=>$productListRecent,
        ];
        return view('frontend.Home', $data);
     }
-    function getList()
-    {
-        $categories = Category::all()->take(8);
-        return view('frontend.home',[
-            'categories'=>$categories
-        ]);
-    }
+
+
 }
