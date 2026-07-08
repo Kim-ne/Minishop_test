@@ -1,4 +1,4 @@
-name: Test
+name: Test CI
 
 on:
   pull_request:
@@ -11,12 +11,15 @@ on:
 env:
   APP_ENV: 'testing'
   DB_CONNECTION: 'sqlite'
-  PHP_VERSION: '8.3'
 
 jobs:
   job-name:
-    name: Test
+    name: Test PHP ${{ matrix.php-versions }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: [8.2, 8.3, 8.4]
 
     steps:
       - name: Step 1
@@ -25,7 +28,7 @@ jobs:
       - name: Step 2
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ env.PHP_VERSION }}
+          php-version: ${{ matrix.php-versions }}
           tools: composer:v2
 
       - name: Step 3
@@ -33,15 +36,15 @@ jobs:
         id: generate-cache
         with:
           path: vendor
-          key: ${{ runner.os }}-php-${{ env.PHP_VERSION }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-              ${{ runner.os }}-php-${{ env.PHP_VERSION }}-composer-
+              ${{ runner.os }}-php-${{ matrix.php-versions }}-composer-
 
       - name: Check cache
         run: |
             echo "cache-hit= ${{ steps.generate-cache.outputs.cache-hit }}"
 
-      - name: Step 5
+      - name: Step 4
         if: steps.generate-cache.outputs.cache-hit != 'true'
         run: |
             start=$(date +%s)
@@ -49,17 +52,17 @@ jobs:
             end=$(date +%s)
             echo "Time taken: $((end-start)) seconds"
 
-      - name: Step 6
+      - name: Step 5
         run: cp ./.env.example ./.env
 
-      - name: Step 7
+      - name: Step 6
         run: touch database/database.sqlite
 
-      - name: Step 8
+      - name: Step 7
         run: php artisan key:generate
 
-      - name: Step 9
+      - name: Step 8
         run: php artisan migrate --force
 
-      - name: Step 10
+      - name: Step 9
         run: php artisan test
