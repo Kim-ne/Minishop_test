@@ -37,8 +37,9 @@ jobs:
           restore-keys: |
               ${{ runner.os }}-php-${{ env.PHP_VERSION }}-composer-
 
-      - name: Step 4
-        run: echo "cache-hit: ${{ steps.generate-cache.outputs.cache-hit }}"
+      - name: Check cache
+        run: |
+            echo "cache-hit= ${{ steps.generate-cache.outputs.cache-hit }}"
 
       - name: Step 5
         if: steps.generate-cache.outputs.cache-hit != 'true'
@@ -61,19 +62,4 @@ jobs:
         run: php artisan migrate --force
 
       - name: Step 10
-        run: composer install --no-interaction --prefer-dist
-
-      - name: Step 4
-        run: cp ./.env.example ./.env
-
-      - name: Step 5
-        run: touch database/database.sqlite
-
-      - name: Step 6
-        run: php artisan key:generate
-
-      - name: Step 7
-        run: php artisan migrate --force
-
-      - name: Step 8
         run: php artisan test
