@@ -3,12 +3,28 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
 
-class Customer extends Model
+
+class Customer extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
+
+    /**
+     * Summary of table
+     *
+     * @var string
+     */
+    protected $table = 'customers';
+
+    /**
+     * Summary of fillable
+     *
+     * @var array
+     */
     protected $fillable = [
         'firstname',
         'lastname',
@@ -30,9 +46,12 @@ class Customer extends Model
         'ship_city',
         'ship_zipcode',
     ];
+
     protected $hidden = [
         'password',
-        'remember_token'];
+        'remember_token'
+    ];
+
     protected function casts(): array
     {
         return [
@@ -40,9 +59,43 @@ class Customer extends Model
             'password' => 'hashed',
         ];
     }
-    function orders()
+
+    public function orders()
     {
         return $this->hasMany(Order::class);
     }
 
+    public  function getNameAttribute()
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public static function emailExists(string $email):bool
+    {
+        return self::where('email', $email)->exists();
+    }
+
+    /**
+     * Customer status
+     */
+
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 0;
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function isInactive(): bool
+    {
+        return $this->status === self::STATUS_INACTIVE;
+    }
+
+    public function scopeForStatus($query)
+    {
+        return $query->select('id', 'firstname', 'lastname', 'email', 'phone','created_at', 'status')
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+    }
 }

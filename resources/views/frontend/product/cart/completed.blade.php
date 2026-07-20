@@ -42,7 +42,7 @@
                                     @php
                                         $sub_total = 0;
                                     @endphp
-                                    <div class="col-lg-8 table-responsive mb-5">
+                                    <div class="col-lg-12 table-responsive mb-5">
                                         <table class="table table-light table-borderless table-hover text-center mb-0">
                                             <thead class="thead-dark">
                                                 <tr class="text-center">
@@ -55,15 +55,17 @@
                                             @foreach ($ordered as $item)
                                                 <div class="">
                                                     @php
-                                                        $sub_total += $item->price * $item->buy_qty;
-                                                        $shipping = $sub_total * 0.05;
-                                                        $total = $sub_total + $shipping;
+                                                        (float)$price = $item->price;
+                                                        (float)$sub_total += $item->price * $item->buy_qty;
+                                                        (float)$shipping = $sub_total * 0.05;
+                                                        (float)$total = $sub_total + $shipping;
+
                                                     @endphp
                                                     <tbody class="align-middle">
                                                         <td class="align-middle"> {{ $loop->iteration }}. {{  $item->name }}</td>
-                                                        <td class="align-middle">  {{ number_format($item->price) * 1000 }}</td>
-                                                        <td class="align-middle">  {{  integer_format($item->buy_qty) }}</td>
-                                                        <td class="align-middle"> {{ number_format($sub_total) * 1000}}</td>
+                                                        <td class="align-middle">  {{ $price * 1000 }}</td>
+                                                        <td class="align-middle">  {{  (int)$item->buy_qty }}</td>
+                                                        <td class="align-middle"> {{$sub_total * 1000}}</td>
                                                     </tbody>
                                                 </div>
                                             @endforeach

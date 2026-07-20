@@ -4,23 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 
 class Category extends Model
 {
-    use HasFactory,Notifiable;
-    function product()
+    use HasFactory;
+
+    public function products()
     {
-        return $this->hasMany(Product::class, 'category_id', 'id');
+        return $this->hasMany(Product::class);
     }
-    function count()
+
+    public function productCount()
     {
         return $this->product()->count();
     }
-    static function getList():Collection
+
+    public static function getList():Collection
     {
-        return self::withCount('product')
+        return self::withCount('products')
                     ->orderBy('name', 'asc')->take(8)->get();
     }
 

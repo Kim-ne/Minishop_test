@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Services\Interface\HomeServiceInterface;
+use App\Services\Contracts\HomeServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -15,28 +15,26 @@ class HomeService implements HomeServiceInterface
      * @return LengthAwarePaginator
      * @return Collection
      */
-    // public function index()
-    // {
-    //     // Lấy danh sách category và product
-    //     $listCategory = Category::orderBy('name', 'asc')
-    //                             ->take(8)->get();
-    //     $listProduct = Product::with('category')
-    //                             ->orderBy('price', 'desc')->paginate(8);
-    //     return [
-    //         'categories'=>$listCategory,
-    //         'products'=>$listProduct
-    //     ];
-    // }
     public function getListProduct(): LengthAwarePaginator
     {
         return Product::getList();
     }
-     public function getListProductRecent(): LengthAwarePaginator
+    public function getListProductRecent(): LengthAwarePaginator
     {
         return Product::getListRecent();
     }
-      public function getListCategory(): Collection
+    public function getListCategory(): Collection
     {
         return Category::getList();
+    }
+
+    public function homeDashboard(): bool
+    {
+        return true;
+    }
+
+    public function socialIndex(): bool
+    {
+        return true;
     }
 }

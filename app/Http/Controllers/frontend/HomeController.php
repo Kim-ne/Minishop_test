@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Services\Interface\HomeServiceInterface;
-use Illuminate\Http\Request;
+use App\Services\Contracts\HomeServiceInterface;
 
 class HomeController extends Controller
 {
@@ -17,7 +15,7 @@ class HomeController extends Controller
         protected HomeServiceInterface $homeService,
     )
     {}
-    function index(Request $request)
+    function index()
     {
        $productList = $this->homeService->getListProduct();
        $categoryList = $this->homeService->getListCategory();

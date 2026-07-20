@@ -5,9 +5,7 @@ namespace App\Http\Controllers\frontend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Product;
-use App\Services\Interface\ProductServiceInterface;
-use Illuminate\Support\Collection;
+use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -21,7 +19,7 @@ class ProductController extends Controller
      */
     function index()
     {
-        $productList = $this->ProductService->getListProduct();
+        $productList = $this->ProductService->getProductPaginate();
         $categories =  $this->ProductService->getListCategory();
 
         return view('frontend.product.index', [
@@ -62,10 +60,7 @@ class ProductController extends Controller
     function search(Request $request)
     {
         $keyword = $request->keyword;
-        $products = Product::where('name', 'like', "%$keyword%")
-                ->orWhere('description', 'like', "%$keyword%")
-                ->paginate(8);
-
+        $products = $this->ProductService->search($keyword);
         return view('frontend.product.search', [
             'products' => $products,
             'keyword' => $keyword,
